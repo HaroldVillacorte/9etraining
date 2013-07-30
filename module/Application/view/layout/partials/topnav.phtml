@@ -1,0 +1,37 @@
+<nav class="top-bar" id="top-bar">
+    <ul>
+      <!-- Title Area -->
+      <li class="name">
+        <h1 id="logo">
+          <a href="<?php echo $this->url('home'); ?>" title="9E Training home page.">
+            <?php echo $this->translate('9E Training'); ?>
+          </a>
+        </h1>
+      </li>
+      <li class="toggle-topbar"><a href="#"></a></li>
+    </ul>
+
+    <section>
+
+      <!-- Left Nav Section -->
+      <ul class="left">
+          <li class="divider"></li>
+          <li><a href="<?php echo $this->url('category'); ?>">Categories</a></li>
+          <li class="divider"></li>
+          <li><a href="<?php echo $this->url('question'); ?>">Questions</a></li>
+          <li class="divider"></li>
+          <li><a href="<?php echo $this->url('study'); ?>">Study</a></li>
+          <li class="divider"></li>
+      </ul>
+
+      <!-- Right Nav Section -->
+      <ul class="right">
+        <li class="divider hide-for-small hide-for-medium"></li>
+        <li>
+            <a href="<?php echo $this->url('zfcuser'); ?>" class="<?php echo $this->ajaxLink(); ?>">
+                <?php echo ($this->zfcUserIdentity()) ? $this->translate('Your Account') : $this->translate('Login'); ?>
+            </a>
+        </li>
+      </ul>
+    </section>
+</nav>

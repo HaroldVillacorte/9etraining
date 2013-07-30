@@ -1,0 +1,25 @@
+<?php $title = $category->getName(); ?>
+<?php $this->headTitle($title); ?>
+<h2><?php echo $this->escapeHtml($category->getName()); ?></h2>
+<section id="question-list">
+<?php $index = 0; ?>
+<?php foreach ($questions as $question): ?>
+    <input type="hidden" class="question"
+           name="question-<?php echo $question->getId(); ?>"
+           value="<?php echo $question->getQuestion(); ?>"
+           answer="<?php echo $question->getAnswer(); ?>"
+           note="<?php echo $question->getNote(); ?>"
+           sequence="<?php echo $index; ?>"
+           />
+    <?php $index++; ?>
+<?php endforeach;?>
+</section>
+<p class="panel" id="qna-panel"></p>
+<p><button id="show-answer-button" class="button success">Show answer</button></p>
+<p><button id="show-question-button" class="button secondary">Show question</button></p>
+<p>
+    <ul class="button-group">
+        <li><a id="prev-button" class="button">Previous</a></li>
+        <li><a id="next-button" class="button">Next</a></li>
+    </ul>
+</p>

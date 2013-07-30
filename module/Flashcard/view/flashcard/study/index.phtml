@@ -1,0 +1,12 @@
+<?php $title = 'Study'; ?>
+<?php $this->headTitle($title); ?>
+<h2><?php echo $this->escapeHtml($title); ?></h2>
+
+<?php foreach ($categories as $category): ?>
+<p>
+    <a class="button large" href="<?php echo $this
+            ->url('study', array('action' => 'category', 'id' => (int) $category->getId())); ?>">
+        <?php echo $this->escapeHtml($category->getName()); ?>
+    </a>
+</p>
+<?php endforeach; ?>

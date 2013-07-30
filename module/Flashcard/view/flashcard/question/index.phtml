@@ -1,0 +1,59 @@
+<?php
+$title = 'Questions';
+$this->headTitle($title);
+?>
+<h2><?php echo $this->escapeHtml($title); ?></h2>
+
+<table border="0" width="100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Question</th>
+            <th>Answer</th>
+            <th>Note</th>
+            <th>Category</th>
+            <th><a href="<?php echo $this->url('question', array('action' => 'add')); ?>" title="Add a question.">Add +</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($questions as $question): ?>
+        <tr>
+            <td><?php echo (int) $question->getId(); ?></td>
+            <td>
+                <a href="<?php echo $this->url('question', array('action' => 'view', 'id' => (int) $question->getId())); ?>">
+                <?php echo $this->escapeHtml($question->getQuestion()); ?>
+                </a>
+            </td>
+            <td>
+                <a href="<?php echo $this->url('question', array('action' => 'view', 'id' => (int) $question->getId())); ?>">
+                <?php echo $this->escapeHtml($question->getAnswer()); ?>
+                </a>
+            </td>
+            <td>
+                <a href="<?php echo $this->url('question', array('action' => 'view', 'id' => (int) $question->getId())); ?>">
+                <?php echo $this->escapeHtml($question->getNote()); ?>
+                </a>
+            </td>
+            <td>
+                <a href="<?php echo $this->url('category', array('action' => 'view', 'id' => (int) $question->getCategory()->getId())); ?>">
+                <?php echo $this->escapeHtml($question->getCategory()->getName()); ?>
+                </a>
+            </td>
+            <td>
+                <a href="<?php echo $this->url('question', array('action' => 'edit', 'id' => (int) $question->getId())); ?>"
+                   class="label primary small round"
+                   title="Edit question <?php echo (int) $question->getId(); ?>">Edit</a>
+                &nbsp;
+                <a href="<?php echo $this->url('question', array('action' => 'delete', 'id' => (int) $question->getId())); ?>"
+                   class="label alert small round"
+                   title="Edit question <?php echo (int) $question->getId(); ?>">Delete</a>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<a href="<?php echo $this->url('question', array('action' => 'add')); ?>"
+   title="Add a question."
+   class="button">
+    Add +
+</a>
