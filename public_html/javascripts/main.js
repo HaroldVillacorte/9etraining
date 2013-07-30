@@ -23,7 +23,7 @@ $('#show-answer-button').on('click', function(event) {
     var showQuestionButton = document.getElementById('show-question-button');
     $(qnaPanel).html($('#qna-panel').attr('answer'));
     if ($(qnaPanel).attr('note') !== '') {
-        $(qnaPanel).append('<br/><br/><strong>Note:</strong><br/>' + $(qnaPanel).attr('note'));
+        $(qnaPanel).append('<br/><strong>Note:</strong><br/>' + $(qnaPanel).attr('note'));
     }
     $(this).hide();
     $(showQuestionButton).show();
