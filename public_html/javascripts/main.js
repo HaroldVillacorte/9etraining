@@ -44,15 +44,18 @@ $('#next-button').on('click', function(event) {
     var nextSequence = parseInt($(qnaPanel).attr('sequence')) + 1;
     var nextQuestion = $('.question[sequence="' + nextSequence +'"]');
     $(qnaPanel).html($(nextQuestion).val());
+    
+    if (parseInt($(qnaPanel).attr('sequence')) ===  $('.question').size() -1) {
+        alert('That was the last question.  Your ninja skills have improved by ten points.');
+    }
+    
     $(qnaPanel).attr('question', $(nextQuestion).val());
     $(qnaPanel).attr('answer', $(nextQuestion).attr('answer'));
     $(qnaPanel).attr('note', $(nextQuestion).attr('note'));
     if (parseInt($(qnaPanel).attr('sequence')) !==  $('.question').size() -1) {
         $(qnaPanel).attr('sequence', parseInt($(qnaPanel).attr('sequence')) + 1);
     }
-    if (parseInt($(qnaPanel).attr('sequence')) ===  $('.question').size() -1) {
-        alert('That was the last question.  Your ninja skills have improved by ten points.');
-    }
+    
     var showAnswerButton = document.getElementById('show-answer-button');
     var showQuestionButton = document.getElementById('show-question-button');
     $(showAnswerButton).show();
@@ -64,6 +67,11 @@ $('#prev-button').on('click', function(event) {
     var qnaPanel = document.getElementById('qna-panel');
     var prevSequence = parseInt($(qnaPanel).attr('sequence')) - 1;
     var prevQuestion = $('.question[sequence="' + prevSequence +'"]');
+    
+    if ((parseInt($(qnaPanel).attr('sequence')) - 1) === -1) {
+        alert('Oops...this is the first question.  Go the other way.');
+    }
+    
     $(qnaPanel).html($(prevQuestion).val());
     $(qnaPanel).attr('question', $(prevQuestion).val());
     $(qnaPanel).attr('answer', $(prevQuestion).attr('answer'));
@@ -71,11 +79,10 @@ $('#prev-button').on('click', function(event) {
     if ((parseInt($(qnaPanel).attr('sequence')) - 1) !== -1) {
         $(qnaPanel).attr('sequence', parseInt($(qnaPanel).attr('sequence')) - 1);
     }
-    if ((parseInt($(qnaPanel).attr('sequence')) - 1) === -1) {
-        alert('Oops...this is the first question.  Go the other way.');
-    }
+    
     var showAnswerButton = document.getElementById('show-answer-button');
     var showQuestionButton = document.getElementById('show-question-button');
+    
     $(showAnswerButton).show();
     $(showQuestionButton).hide();
 });
