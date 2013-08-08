@@ -43,7 +43,7 @@ class Role implements HierarchicalRoleInterface
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="roles")
+     * @ORM\OneToMany(targetEntity="User", mappedBy="roles")
      */
     protected $users;
 
@@ -111,6 +111,16 @@ class Role implements HierarchicalRoleInterface
     public function setParent(Role $parent)
     {
         $this->parent = $parent;
+    }
+
+    /**
+     * Get the users
+     *
+     * @return User
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 
     public function getArrayCopy()

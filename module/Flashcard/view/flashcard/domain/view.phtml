@@ -1,15 +1,25 @@
 <?php
-$title = 'Categories';
+$title = $domain->getName() . ' Categories';
 $this->headTitle($title);
 ?>
+
+<?php
+    function trimString($string) {
+        return (strlen($string) > 90) ? substr($string, 0, 90) . '...' : $string;
+    }
+?>
+
 <h2><?php echo $this->escapeHtml($title); ?></h2>
+
 <table border="0" width="100%">
     <thead>
         <tr>
             <th>Id</th>
-            <th>Name</th>
+            <th>Category</th>
             <th>Domain</th>
-            <th><a href="<?php echo $this->url('category', array('action' => 'add')); ?>" title="Add a category.">Add +</a></th>
+            <th><a href="<?php echo $this
+                ->url('category', array('action' => 'add', 'id' => (int) $domain->getId())); ?>"
+                title="Add a category.">Add +</a></th>
         </tr>
     </thead>
     <tbody>
@@ -18,14 +28,10 @@ $this->headTitle($title);
             <td><?php echo (int) $category->getId(); ?></td>
             <td>
                 <a href="<?php echo $this->url('category', array('action' => 'view', 'id' => (int) $category->getId())); ?>">
-                <?php echo $this->escapeHtml($category->getName()); ?>
+                <?php echo trimString($this->escapeHtml($category->getName())); ?>
                 </a>
             </td>
-            <td>
-                <a href="<?php echo $this->url('domain', array('action' => 'view', 'id' => (int) $category->getDomain()->getId())); ?>">
-                <?php echo $this->escapeHtml($category->getDomain()->getName()); ?>
-                </a>
-            </td>
+            <td><?php echo $this->escapeHtml($category->getDomain()->getName()); ?></td>
             <td>
                 <a href="<?php echo $this->url('category', array('action' => 'edit', 'id' => (int) $category->getId())); ?>"
                    class="label primary small round"
@@ -43,5 +49,13 @@ $this->headTitle($title);
 <?php
     echo $this
         ->paginationControl($this
-            ->paginator, 'sliding' ,array('partial/paginator.phtml', 'Flashcard'), array('route' => 'categoryIndex'));
+            ->paginator, 'sliding',
+            array('partial/paginator.phtml', 'Flashcard'),
+            array('route' => 'domain', 'action' => 'view', 'id' => $domain_id));
 ?>
+<br/><br/>
+<p><a href="<?php echo $this->url('category', array('action' => 'add', 'id' => (int) $domain->getId())); ?>"
+   title="Add a category."
+   class="button">
+    Add +
+</a></p>

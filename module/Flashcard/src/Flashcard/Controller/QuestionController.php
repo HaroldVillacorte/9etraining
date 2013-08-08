@@ -6,6 +6,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Flashcard\Form\QuestionForm;
 use Flashcard\Entity\Question;
+use Zend\Paginator\Paginator;
 
 class QuestionController extends AbstractActionController
 {
@@ -16,23 +17,57 @@ class QuestionController extends AbstractActionController
 
     public function indexAction()
     {
-        $questions = $this->getEntityManager()->getRepository('Flashcard\Entity\Question')->findAll();
+        $page = (int) $this->params('page');
+        $limit = 10;
+        switch ($page)
+        {
+            case null:
+                $offset = 0;
+                break;
+            case 1:
+                $offset = 0;
+                break;
+            default :
+                $offset = ($page - 1) * $limit;
+                break;
+        }
+
+         // COUNT QUERY
+        $countQuery = 'SELECT COUNT(u.id) FROM Flashcard\Entity\Question u';
+        $questionsCount = $this->getEntityManager()->createQuery($countQuery)
+            ->getSingleScalarResult();
+
+        // RESULT QUERY
+        $resultQuery = 'SELECT u FROM Flashcard\Entity\Question u';
+        $questions = $this->getEntityManager()->createQuery($resultQuery)
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getResult();
+
+        $paginator = new Paginator(new \Zend\Paginator\Adapter\Null($questionsCount));
+        $paginator->setItemCountPerPage($limit);
+        $paginator->setCurrentPageNumber($page);
+
+        //$questions = $this->getEntityManager()->getRepository('Flashcard\Entity\Question')->findAll();
 
         //$this->layout('layout/admin-layout');
         return new ViewModel(array(
             'questions' => $questions,
+            'paginator' => $paginator,
         ));
     }
 
     public function addAction()
     {
+        $category_id = (int) $this->params('id');
         $categories = $this->getEntityManager()->getRepository('Flashcard\Entity\Category')->findAll();
         $categories_array = array();
         foreach ($categories as $category) {
             $categories_array[$category->getId()] = $category->getName();
         }
-        
-        $form = new QuestionForm('question', $categories_array);
+
+        $set_value = ($category_id) ? array($category_id) : array();
+        $form = new QuestionForm('question', $categories_array, $set_value);
         $form->setValidationGroup('csrf', 'question', 'answer', 'category_options');
 
         $form->get('submit')->setAttribute('value', 'Add');
@@ -42,7 +77,7 @@ class QuestionController extends AbstractActionController
             $question = new Question();
             $data = $request->getPost();
             $form->setData($data);
-            if ($form->isValid()) {                
+            if ($form->isValid()) {
                 $question->setQuestion($data['question']);
                 $question->setAnswer($data['answer']);
                 $question->setNote($data['note']);
@@ -61,7 +96,8 @@ class QuestionController extends AbstractActionController
                 }
 
                 // Redirect to list of albums
-                return $this->redirect()->toRoute('question');
+                return $this->redirect()
+                        ->toRoute('category', array('action' => 'view', 'id' => $category->getId()));
             }
         }
         return new ViewModel(array(
@@ -78,7 +114,7 @@ class QuestionController extends AbstractActionController
         {
             return $this->redirect()->toRoute('question');
         }
-        
+
         $categories = $this->getEntityManager()->getRepository('Flashcard\Entity\Category')->findAll();
         $categories_array = array();
         $question_category = $question->getCategory()->getId();
@@ -89,7 +125,7 @@ class QuestionController extends AbstractActionController
                 $set_value[] = $category->getId();
             }
         }
-        
+
 
         $form = new QuestionForm('question', $categories_array, $set_value);
 
@@ -120,7 +156,12 @@ class QuestionController extends AbstractActionController
                         ->addMessage('There was a problem saving the question.');
                 }
                 // Redirect to list of albums
-                return $this->redirect()->toRoute('question');
+                return $this
+                    ->redirect()
+                    ->toRoute('category', array(
+                                            'action' => 'view',
+                                            'id' => $question->getCategory()->getId(),
+                                        ));
             }
             else {
                 $form->setData($request->getPost());
@@ -168,22 +209,20 @@ class QuestionController extends AbstractActionController
         ));
     }
 
-    /*public function viewAction()
+    public function viewAction()
     {
         $id = (int) $this->params('id');
-        $category = $this->getEntityManager()->find('Music\Entity\Genre', $id);
-        if (!$id || !$category)
+        $question = $this->getEntityManager()->find('Flashcard\Entity\Question', $id);
+        if (!$id || !$question)
         {
-            return $this->redirect()->toRoute('category');
+            return $this->redirect()->toRoute('question');
         }
-        $artists = $category->getArtists();
 
-        $this->layout('layout/admin-layout');
         return new ViewModel(array(
-            'category' => $category,
-            'artists' => $artists,
+            'question' => $question,
+            'id' => $id,
         ));
-    }*/
+    }
 
     public function setEntityManager(EntityManager $em)
     {

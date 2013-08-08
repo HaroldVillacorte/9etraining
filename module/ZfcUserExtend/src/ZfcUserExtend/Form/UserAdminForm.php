@@ -9,7 +9,7 @@ use Zend\InputFilter;
 class UserAdminForm extends Form
 {
 
-    function __construct($name = null, $roles_array = array(), $state_value = 1, $user_roles_values = array(), $password_required = true)
+    function __construct($name = null, $roles_array = array(), $state_value = 1, $user_roles_value = null, $password_required = true)
     {
         parent::__construct($name);
         $this->setInputFilter($this->createInputFilter($password_required));
@@ -56,10 +56,10 @@ class UserAdminForm extends Form
         $this->add($state);
 
         // User roles
-        $user_roles = new Element\MultiCheckbox('user_roles');
+        $user_roles = new Element\Radio('user_roles');
         $user_roles->setValueOptions($roles_array);
-        $user_roles->setValue($user_roles_values);
-        $user_roles->setLabel('Roles');
+        $user_roles->setValue($user_roles_value);
+        $user_roles->setLabel('Role');
         $this->add($user_roles);
 
         // Submit.
@@ -136,6 +136,7 @@ class UserAdminForm extends Form
         // User Roles
         $user_roles = new InputFilter\Input('user_roles');
         $user_roles->setRequired(true);
+        $user_roles->getValidatorChain()->addByName('Digits');
         $inputFilter->add($user_roles);
 
         return $inputFilter;

@@ -1,0 +1,40 @@
+<?php if ($this->pageCount): ?>
+<ul class="pagination">
+
+<!-- First and Previous page link -->
+<?php if (isset($this->previous)): ?>
+  <li><a href="<?php echo $this->url($this->route, array('action' => $this->action, 'id' => $this->id, 'page' => $this->first)); ?>">
+    First
+  </a>
+  <li><a href="<?php echo $this->url($this->route, array('action' => $this->action, 'id' => $this->id, 'page' => $this->previous)); ?>">
+    &lt; Previous
+  </a>
+<?php endif; ?>
+
+<!-- Numbered page links -->
+<?php foreach ($this->pagesInRange as $page): ?>
+  <?php if ($page != $this->current): ?>
+    <li><a href="<?php echo $this->url($this->route, array('action' => $this->action, 'id' => $this->id, 'page' => $page)); ?>">
+        <?php echo $page; ?>
+    </a></li>
+  <?php else: ?>
+    <li class="current"><a href=""><?php echo $page; ?></a></li>
+  <?php endif; ?>
+<?php endforeach; ?>
+
+<!-- Last and Next page link -->
+<?php if (isset($this->next)): ?>
+  <li><a href="<?php echo $this->url($this->route, array('action' => $this->action, 'id' => $this->id, 'page' => $this->next)); ?>">
+    Next &gt;
+  </a></li>
+  <li><a href="<?php echo $this->url($this->route, array('action' => $this->action, 'id' => $this->id, 'page' => $this->last)); ?>">
+    Last
+  </a></li>
+<?php endif; ?>
+
+</ul>
+Displaying <?php echo $this
+    ->firstItemNumber; ?> to <?php echo $this
+        ->lastItemNumber; ?> of <?php echo $this
+            ->totalItemCount; ?> items.
+<?php endif; ?>

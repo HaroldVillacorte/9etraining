@@ -1,5 +1,5 @@
 <?php
-$title = 'Users';
+$title = 'All Users';
 $this->headTitle($title);
 ?>
 <h2><?php echo $this->escapeHtml($title); ?></h2>
@@ -20,24 +20,20 @@ $this->headTitle($title);
         <?php foreach($users as $user): ?>
         <tr>
             <td width="10%"><?php echo (int) $user->getId(); ?></td>
-            <td><?php echo $this->escapeHtml($user->getUsername()); ?></td>
+            <td>
+                <a href="<?php echo $this->url('useradmin', array('action' => 'view', 'id' => $user->getId())); ?>">
+                    <?php echo $this->escapeHtml($user->getUsername()); ?>
+                </a>
+            </td>
             <td><?php echo $this->escapeHtml($user->getDisplayName()); ?></td>
             <td><?php echo '<a href="mailto:' . $this->escapeHtml($user->getEmail())
                 . '">' . $this->escapeHtml($user->getEmail()) .'</a>'; ?></td>
             <td><?php echo (int) $user->getState(); ?></td>
             <td>
-                <?php if (count($user->getRoles()) > 0):?>
-                    <?php
-                    $roles_array = array();
-                    foreach ($user->getRoles() as $role)
-                    {
-                        $roles_array[] = '<a href="'
-                            . $this->url('role', array('action' => 'view', 'id' => (int) $role->getId()))
-                            .'">' .  $this->escapeHtml($role->getRoleId()) . '</a>';
-                    }
-                    ?>
-                    <?php echo implode(', ', $roles_array); ?>
-                <?php endif; ?>
+                <a href="<?php echo $this
+                    ->url('role', array('action' => 'view', 'id' => $this->escapeHtml($user->getRoles()->getId()))); ?>">
+                        <?php echo $user->getRoles()->getRoleId(); ?>
+                </a>
             </td>
             <td >
                 <a href="<?php echo $this->url('useradmin', array('action' => 'edit', 'id' => (int) $user->getId())); ?>"

@@ -34,6 +34,11 @@ class Category
      **/
     protected $questions;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Domain", inversedBy="categories")
+     */
+    protected $domain;
+
     // GETTERS
 
     public function getId()
@@ -49,6 +54,16 @@ class Category
     public function getQuestions()
     {
         return $this->questions;
+    }
+
+    public function setDomain(Domain $domain)
+    {
+        $this->domain = $domain;
+    }
+
+    public function getDomain()
+    {
+        return $this->domain;
     }
 
     // SETTERS
@@ -69,5 +84,5 @@ class Category
     {
         return get_object_vars($this);
     }
-    
+
 }

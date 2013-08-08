@@ -33,6 +33,7 @@ return array(
             'BjyAuthorize\Provider\Resource\Config' => array(
                 'userLink' => array(),
                 'adminLink' => array(),
+                'superuserLink' => array(),
             ),
         ),
 
@@ -45,6 +46,7 @@ return array(
                     // the "wear" privilege on the resource "pants"
                     array(array('user'), 'userLink', 'view'),
                     array(array('admin'), 'adminLink', 'view'),
+                    array(array('superuser'), 'superuserLink', 'view'),
                 ),
 
                 // Don't mix allow/deny rules if you are using role inheritance.
@@ -62,7 +64,8 @@ return array(
                 array('route' => 'zfcuser/logout', 'roles' => array('guest', 'user')),
                 array('route' => 'zfcuser/login', 'roles' => array('guest', 'user')),
                 array('route' => 'zfcuser/register', 'roles' => array('guest', 'user')),
-                array('route' => 'role', 'roles' => array('guest', 'user')),
+                array('route' => 'role', 'roles' => array('admin')),
+                array('route' => 'useradmin', 'roles' => array('admin')),
                 array('route' => 'home', 'roles' => array('guest', 'user')),
 
                 // ZF2FileUploadExamples
@@ -75,9 +78,15 @@ return array(
                 array('route' => 'team-contact', 'roles' => array('guest', 'user')),
 
                 // Falshcard module.
+                array('route' => 'domain', 'roles' => array('admin')),
+                array('route' => 'domainIndex', 'roles' => array('admin')),
                 array('route' => 'category', 'roles' => array('admin')),
+                array('route' => 'categoryIndex', 'roles' => array('admin')),
                 array('route' => 'question', 'roles' => array('admin')),
+                array('route' => 'questionIndex', 'roles' => array('admin')),
+                array('route' => 'questionByCategory', 'roles' => array('admin')),
                 array('route' => 'study', 'roles' => array('user')),
+                array('route' => 'study-rest', 'roles' => array('guest')),
             ),
         ),
 

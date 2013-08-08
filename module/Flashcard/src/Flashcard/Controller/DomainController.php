@@ -4,11 +4,11 @@ namespace Flashcard\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Flashcard\Form\CategoryForm;
-use Flashcard\Entity\Category;
+use Flashcard\Form\DomainForm;
+use Flashcard\Entity\Domain;
 use Zend\Paginator\Paginator;
 
-class CategoryController extends AbstractActionController
+class DomainController extends AbstractActionController
 {
     /**
      * @var Doctrine\ORM\EntityManager
@@ -33,12 +33,12 @@ class CategoryController extends AbstractActionController
         }
 
         // COUNT QUERY
-        $countQuery = 'SELECT COUNT(u.id) FROM Flashcard\Entity\Category u';
+        $countQuery = 'SELECT COUNT(u.id) FROM Flashcard\Entity\Domain u';
         $categoriesCount = $this->getEntityManager()->createQuery($countQuery)
             ->getSingleScalarResult();
 
         // RESULT QUERY
-        $resultQuery = 'SELECT u FROM Flashcard\Entity\Category u';
+        $resultQuery = 'SELECT u FROM Flashcard\Entity\Domain u';
         $categories = $this->getEntityManager()->createQuery($resultQuery)
             ->setMaxResults($limit)
             ->setFirstResult($offset)
@@ -49,54 +49,38 @@ class CategoryController extends AbstractActionController
         $paginator->setCurrentPageNumber($page);
 
         return new ViewModel(array(
-            'categories' => $categories,
+            'domains' => $categories,
             'paginator' => $paginator,
         ));
     }
 
     public function addAction()
     {
-        $domain_id = (int) $this->params('id');
-
-        $domains = $this
-            ->getEntityManager()
-            ->getRepository('Flashcard\Entity\Domain')
-            ->findAll();
-        $domains_array = array();
-        foreach ($domains as $domain)
-        {
-            $domains_array[$domain->getId()] = $domain->getName();
-        }
-
-        $form = new CategoryForm('category', $domains_array, $domain_id);
-        $form->setValidationGroup('csrf', 'name', 'domain_option');
+        $form = new DomainForm('domain');
+        $form->setValidationGroup('csrf', 'name');
 
         $form->get('submit')->setAttribute('value', 'Add');
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $category = new Category();
+            $domain = new Domain();
             $data = $request->getPost();
             $form->setData($data);
             if ($form->isValid()) {
-                $category->setName($data['name']);
-                $domain = $this->getEntityManager()
-                    ->find('Flashcard\Entity\Domain', $data['domain_option']);
-                $category->setdomain($domain);
-                $this->getEntityManager()->persist($category);
+                $domain->setName($data['name']);
+                $this->getEntityManager()->persist($domain);
                 try {
                     $this->getEntityManager()->flush();
                     $this->flashMessenger()->setNamespace('success')
-                        ->addMessage('Category was successfully added.');
+                        ->addMessage('Domain was successfully added.');
                 }
                 catch (Exception $e) {
                     $this->flashMessenger()->setNamespace('error')
-                        ->addMessage('There was a problem adding the category.');
+                        ->addMessage('There was a problem adding the domain.');
                 }
 
-                // Redirect to list of categories.
-                return $this->redirect()
-                    ->toRoute('domain', array('action' => 'view', 'id' => $domain->getId()));
+                // Redirect to list of albums
+                return $this->redirect()->toRoute('domain');
             }
         }
 
@@ -108,27 +92,17 @@ class CategoryController extends AbstractActionController
     public function editAction()
     {
         $id = (int) $this->params('id');
-        $category = $this->getEntityManager()->find('Flashcard\Entity\Category', $id);
+        $domain = $this->getEntityManager()->find('Flashcard\Entity\Domain', $id);
 
-        if (!$id || !$category)
+        if (!$id || !$domain)
         {
-            return $this->redirect()->toRoute('category');
+            return $this->redirect()->toRoute('domain');
         }
 
-        $domains = $this
-            ->getEntityManager()
-            ->getRepository('Flashcard\Entity\Domain')
-            ->findAll();
-        $domains_array = array();
-        foreach ($domains as $domain)
-        {
-            $domains_array[$domain->getId()] = $domain->getName();
-        }
-
-        $form = new CategoryForm('category', $domains_array, $category->getDomain()->getId());
+        $form = new DomainForm();
 
         $form->setBindOnValidate(false);
-        $form->bind($category);
+        $form->bind($domain);
         $form->get('submit')->setAttribute('value', 'Save');
 
         $request = $this->getRequest();
@@ -138,22 +112,18 @@ class CategoryController extends AbstractActionController
             $form->setData($data);
             if ($form->isValid())
             {
-                $category->setName($data['name']);
-                $domain = $this->getEntityManager()
-                    ->find('Flashcard\Entity\Domain', $data['domain_option']);
-                $category->setdomain($domain);
+                $domain->setName($data['name']);
                 try {
                     $this->getEntityManager()->flush();
                     $this->flashMessenger()->setNamespace('success')
-                        ->addMessage('Category was successfully saved.');
+                        ->addMessage('Domain was successfully saved.');
                 }
                 catch (Exception $e) {
                     $this->flashMessenger()->setNamespace('error')
-                        ->addMessage('There was a problem saving the category.');
+                        ->addMessage('There was a problem saving the domain.');
                 }
-                // Redirect to list of categories.
-                return $this->redirect()
-                    ->toRoute('domain', array('action' => 'view', 'id' => $domain->getId()));
+                // Redirect to list of domains.
+                return $this->redirect()->toRoute('domain');
             }
             else {
                 $form->setData($request->getPost());
@@ -170,40 +140,40 @@ class CategoryController extends AbstractActionController
     {
         $id = (int) $this->params('id');
         if (!$id) {
-            return $this->redirect()->toRoute('category');
+            return $this->redirect()->toRoute('domain');
         }
 
-        $category = $this->getEntityManager()->find('Flashcard\Entity\Category', $id);
+        $domain = $this->getEntityManager()->find('Flashcard\Entity\Domain', $id);
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             $del = $request->getPost()->get('del', 'No');
             if ($del == 'Yes') {
-                $this->getEntityManager()->remove($category);
+                $this->getEntityManager()->remove($domain);
                 try {
                     $this->getEntityManager()->flush();
                     $this->flashMessenger()->setNamespace('success')
-                        ->addMessage('Category was successfully deleted.');
+                        ->addMessage('Domain was successfully deleted.');
                 }
                 catch (Exception $e) {
                     $this->flashMessenger()->setNamespace('error')
-                        ->addMessage('There was a deleting the category.');
+                        ->addMessage('There was a deleting the domain.');
                 }
             }
 
             // Redirect to list of variables.
-            return $this->redirect()->toRoute('category');
+            return $this->redirect()->toRoute('domain');
         }
 
         return new ViewModel(array(
             'id' => $id,
-            'category' => $category,
+            'domain' => $domain,
         ));
     }
 
     public function viewAction()
     {
-        $category_id = (int) $this->params('id');
+        $domain_id = (int) $this->params('id');
         $page = (int) $this->params('page');
         $limit = 10;
         switch ($page)
@@ -219,30 +189,30 @@ class CategoryController extends AbstractActionController
                 break;
         }
 
-        // GET CATEGORY
-        $category = $this->getEntityManager()->find('Flashcard\Entity\Category', $category_id);
+        // GET DOMAIN
+        $domain = $this->getEntityManager()->find('Flashcard\Entity\Domain', $domain_id);
 
         // COUNT QUERY
-        $countQuery = "SELECT COUNT(u.id) FROM Flashcard\Entity\Question u WHERE u.category={$category_id}";
-        $questionsCount = $this->getEntityManager()->createQuery($countQuery)
+        $countQuery = "SELECT COUNT(u.id) FROM Flashcard\Entity\Category u WHERE u.domain={$domain_id}";
+        $categoriesCount = $this->getEntityManager()->createQuery($countQuery)
             ->getSingleScalarResult();
 
         // RESULT QUERY
-        $resultQuery = "SELECT u FROM Flashcard\Entity\Question u WHERE u.category={$category_id}";
-        $questions = $this->getEntityManager()->createQuery($resultQuery)
+        $resultQuery = "SELECT u FROM Flashcard\Entity\Category u WHERE u.domain={$domain_id}";
+        $categories = $this->getEntityManager()->createQuery($resultQuery)
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->getResult();
 
-        $paginator = new Paginator(new \Zend\Paginator\Adapter\Null($questionsCount));
+        $paginator = new Paginator(new \Zend\Paginator\Adapter\Null($categoriesCount));
         $paginator->setItemCountPerPage($limit);
         $paginator->setCurrentPageNumber($page);
 
         return new ViewModel(array(
-            'questions' => $questions,
+            'categories' => $categories,
             'paginator' => $paginator,
-            'category_id' => $category_id,
-            'category' => $category,
+            'domain_id' => $domain_id,
+            'domain' => $domain,
         ));
     }
 

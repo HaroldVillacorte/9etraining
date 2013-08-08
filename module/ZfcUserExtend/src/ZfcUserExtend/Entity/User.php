@@ -62,18 +62,14 @@ class User implements UserInterface, ProviderInterface
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
-     * @ORM\JoinTable(name="user_role_linker")
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="users")
      */
     protected $roles;
 
     /**
-     * Initialies the roles variable.
+     * @ORM\OneToOne(targetEntity="ApiKey", mappedBy="user")
      */
-    public function __construct()
-    {
-        $this->roles = new ArrayCollection();
-    }
+    protected $apiKey;
 
     /**
      * Get id.
@@ -208,22 +204,27 @@ class User implements UserInterface, ProviderInterface
     }
 
     /**
-     * Get role.
+     * Set the user's roles.
+     * @param Role $roles
+     */
+    public function setRoles(Role $roles)
+    {
+        $this->roles = $roles;
+    }
+
+    /**
+     * Get roles.
      *
-     * @return array
+     * @return Role
      */
     public function getRoles()
     {
-        return $this->roles->getValues();
+        return $this->roles;
     }
-    
-    /**
-     * Set the user's roles.
-     * @param array $roles
-     */
-    public function setRoles($roles = array())
+
+    public function getApiKey()
     {
-        $this->roles = $roles;
+        return $this->apiKey;
     }
 
     public function getArrayCopy()

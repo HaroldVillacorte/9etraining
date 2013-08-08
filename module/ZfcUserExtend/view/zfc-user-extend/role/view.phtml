@@ -1,0 +1,52 @@
+<?php $title = 'Role: ' . $role->getRoleId(); ?>
+<?php $this->headTitle($title); ?>
+<h2><?php echo $this->escapeHtml($title); ?></h2>
+
+<h3>Users</h3>
+<table width="100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Userame</th>
+            <th>Display Name</th>
+            <th>Email</th>
+            <th><a href="<?php echo $this
+                ->url('useradmin', array('action' => 'add', 'id' => $role->getId())); ?>">
+                    Add +
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($users as $user): ?>
+        <tr>
+            <td><?php echo (int) $user->getId(); ?></td>
+            <td>
+                <a href="<?php echo $this->url('useradmin', array('action'=> 'view', 'id' => $user->getId())); ?>">
+                    <?php echo $this->escapeHtml($user->getUsername()); ?>
+                </a>
+            </td>
+            <td><?php echo $this->escapeHtml($user->getDisplayName()); ?></td>
+            <td>
+                <a href="mailto:<?php echo $this->escapeHtml($user->getEmail()); ?>">
+                    <?php echo $this->escapeHtml($user->getEmail()); ?>
+                </a>
+            </td>
+            <td>
+                <a class="label round"
+                   href="<?php echo $this
+                     ->url('useradmin', array('action' => 'edit', 'id' => (int) $user->getId())); ?>">
+                     Edit
+                </a>
+                &nbsp;
+                <a class="label round alert"
+                   href="<?php echo $this
+                     ->url('useradmin', array('action' => 'delete', 'id' => (int) $user->getId())); ?>">
+                     Delete
+                </a>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+

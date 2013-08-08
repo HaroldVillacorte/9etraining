@@ -14,7 +14,6 @@ class RoleController extends AbstractActionController
     public function indexAction()
     {
         $roles = $this->getEntityManager()->getRepository('ZfcUserExtend\Entity\Role')->findAll();
-        $this->layout('layout/admin-layout');
         return new ViewModel(array(
             'roles' =>$roles,
         ));
@@ -34,7 +33,7 @@ class RoleController extends AbstractActionController
             $roles_array['0'] = 'Parent roles are not available.';
         }
         $form = new RoleForm('role', $roles_array);
-        $form->setValidationGroup('csrf', 'roleId', 'parent');
+        $form->setValidationGroup('csrf', 'roleId', 'parent_id');
         if (array_key_exists('0', $roles_array))
         {
             $form->get('parent')->setAttribute('disabled', 'disabled');
@@ -52,7 +51,6 @@ class RoleController extends AbstractActionController
             }
         }
 
-        $this->layout('layout/admin-layout');
         return new ViewModel(array(
             'form' => $form,
         ));
@@ -103,7 +101,6 @@ class RoleController extends AbstractActionController
             }
         }
 
-        $this->layout('layout/admin-layout');
         return new ViewModel(array(
             'form' => $form,
             'id' => $id,
@@ -129,10 +126,27 @@ class RoleController extends AbstractActionController
                         ->toRoute('role');
         }
 
-        $this->layout('layout/admin-layout');
         return new ViewModel(array(
             'id' => $id,
             'role' => $role,
+        ));
+    }
+
+    public function viewAction()
+    {
+        $id = (int) $this->params('id');
+        $role = $this->getEntityManager()->find('ZfcUserExtend\Entity\Role', $id);
+        if (!$id || !$role)
+        {
+            $this->redirect()->toRoute('role');
+        }
+
+        $users = $role->getUsers();
+
+        return new ViewModel(array(
+            'id' => $id,
+            'role' => $role,
+            'users' => $users,
         ));
     }
 

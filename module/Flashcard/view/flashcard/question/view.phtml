@@ -1,42 +1,23 @@
-<?php
-$title = $genre->getName();
-$this->headTitle($title);
-?>
-<h2><?php echo $this->escapeHtml($title); ?></h2>
-<h3>Artists</h3>
+<?php $title = $question->getCategory()->getName(); ?>
+<?php $this->headTitle($title); ?>
 
-<table border="0" width="100%">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>
-                <a
-                    href="<?php echo $this->url('artist', array('action' => 'add')); ?>"
-                    title="Add an artist.">Add +
-                </a>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach($artists as $artist): ?>
-        <tr>
-            <td><?php echo (int) $artist->getId(); ?></td>
-            <td>
-                <a href="<?php echo $this->url('artist', array('action' => 'view', 'id' => (int) $artist->getId())); ?>">
-                    <?php echo $this->escapeHtml($artist->getName()); ?>
-                </a>
-            </td>
-            <td>
-                <a href="<?php echo $this->url('artist', array('action' => 'edit', 'id' => (int) $artist->getId())); ?>"
-                   class="label primary small round"
-                   title="Edit artist <?php echo (int) $artist->getId(); ?>.">Edit</a>
-                &nbsp;
-                <a href="<?php echo $this->url('artist', array('action' => 'delete', 'id' => (int) $artist->getId())); ?>"
-                   class="label alert small round"
-                   title="Delete artist <?php echo (int) $artist->getId(); ?>.">Delete</a>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+<h2><?php echo $this->escapeHtml($title); ?></h2>
+
+<input type="hidden" class="question"
+           name="question-<?php echo (int) $question->getId(); ?>"
+           value="<?php echo $this->escapeHtml($question->getQuestion()); ?>"
+           answer="<?php echo $this->escapeHtml($question->getAnswer()); ?>"
+           note="<?php echo $this->escapeHtml($question->getNote()); ?>"
+           />
+
+<p class="panel" id="qna-panel"></p>
+<p><button id="show-answer-button" class="button success">Show answer</button></p>
+<p><button id="show-question-button" class="button secondary">Show question</button></p>
+<p>
+    <a href="<?php echo $this
+        ->url('category',array('action' => 'view', 'id' => $question->getCategory()->getId())); ?>"
+        id="back-to-category-button" class="button">
+        Back to category
+    </a>
+</p>
+

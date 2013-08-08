@@ -1,7 +1,14 @@
 <?php
-$title = 'Questions';
+$title = 'All Questions';
 $this->headTitle($title);
 ?>
+
+<?php
+    function trimString($string) {
+        return (strlen($string) > 90) ? substr($string, 0, 90) . '...' : $string;
+    }
+?>
+
 <h2><?php echo $this->escapeHtml($title); ?></h2>
 
 <table border="0" width="100%">
@@ -9,8 +16,6 @@ $this->headTitle($title);
         <tr>
             <th>Id</th>
             <th>Question</th>
-            <th>Answer</th>
-            <th>Note</th>
             <th>Category</th>
             <th><a href="<?php echo $this->url('question', array('action' => 'add')); ?>" title="Add a question.">Add +</a></th>
         </tr>
@@ -21,17 +26,7 @@ $this->headTitle($title);
             <td><?php echo (int) $question->getId(); ?></td>
             <td>
                 <a href="<?php echo $this->url('question', array('action' => 'view', 'id' => (int) $question->getId())); ?>">
-                <?php echo $this->escapeHtml($question->getQuestion()); ?>
-                </a>
-            </td>
-            <td>
-                <a href="<?php echo $this->url('question', array('action' => 'view', 'id' => (int) $question->getId())); ?>">
-                <?php echo $this->escapeHtml($question->getAnswer()); ?>
-                </a>
-            </td>
-            <td>
-                <a href="<?php echo $this->url('question', array('action' => 'view', 'id' => (int) $question->getId())); ?>">
-                <?php echo $this->escapeHtml($question->getNote()); ?>
+                <?php echo trimString($this->escapeHtml($question->getQuestion())); ?>
                 </a>
             </td>
             <td>
@@ -52,8 +47,15 @@ $this->headTitle($title);
         <?php endforeach; ?>
     </tbody>
 </table>
-<a href="<?php echo $this->url('question', array('action' => 'add')); ?>"
+
+<?php
+    echo $this
+        ->paginationControl($this
+            ->paginator, 'sliding' ,array('partial/paginator.phtml', 'Flashcard'), array('route' => 'questionIndex'));
+?>
+<br/><br/>
+<p><a href="<?php echo $this->url('question', array('action' => 'add')); ?>"
    title="Add a question."
    class="button">
     Add +
-</a>
+</a></p>

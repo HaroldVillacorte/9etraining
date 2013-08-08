@@ -5,11 +5,11 @@
 <?php $index = 0; ?>
 <?php foreach ($questions as $question): ?>
     <input type="hidden" class="question"
-           name="question-<?php echo $question->getId(); ?>"
-           value="<?php echo $question->getQuestion(); ?>"
-           answer="<?php echo $question->getAnswer(); ?>"
-           note="<?php echo $question->getNote(); ?>"
-           sequence="<?php echo $index; ?>"
+           name="question-<?php echo (int) $question->getId(); ?>"
+           value="<?php echo $this->escapeHtml($question->getQuestion()); ?>"
+           answer="<?php echo $this->escapeHtml($question->getAnswer()); ?>"
+           note="<?php echo $this->escapeHtml($question->getNote()); ?>"
+           sequence="<?php echo (int) $index; ?>"
            />
     <?php $index++; ?>
 <?php endforeach;?>

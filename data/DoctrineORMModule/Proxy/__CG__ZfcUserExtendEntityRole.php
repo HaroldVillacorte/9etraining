@@ -81,6 +81,12 @@ class Role extends \ZfcUserExtend\Entity\Role implements \Doctrine\ORM\Proxy\Pro
         return parent::setParent($parent);
     }
 
+    public function getUsers()
+    {
+        $this->__load();
+        return parent::getUsers();
+    }
+
     public function getArrayCopy()
     {
         $this->__load();

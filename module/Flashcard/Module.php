@@ -19,4 +19,20 @@ class Module
     {
         return include __DIR__ . '/config/module.config.php';
     }
+
+    public function getViewHelperConfig()
+    {
+        return array(
+            'factories' => array(
+                'studyLink' => function ($sm) {
+                    $sm = $sm->getServiceLocator();
+                    $em = $sm->get('doctrine.entitymanager.orm_default');
+                    $view_helper = new \Flashcard\View\Helper\StudyLinkHelper();
+                    $view_helper->setEntityManager($em);
+                    return $view_helper;
+                }
+            ),
+        );
+    }
+
 }

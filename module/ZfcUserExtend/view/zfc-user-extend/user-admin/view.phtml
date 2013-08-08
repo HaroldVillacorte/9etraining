@@ -1,0 +1,37 @@
+<?php
+$title = 'User: ' . $user->getUsername();
+$this->headTitle($title);
+?>
+<h2><?php echo $this->escapeHtml($title); ?></h2>
+
+<p>User Id: <?php echo $user->getId(); ?></p>
+<p>Username: <?php echo $user->getUsername(); ?></p>
+<p>Display Name: <?php echo $user->getDisplayName(); ?></p>
+<p>
+    Email:
+    <a href="mailto:<?php echo $user->getEmail(); ?>">
+        <?php echo $user->getEmail(); ?>
+    </a>
+</p>
+<p>State: <?php echo $user->getState(); ?></p>
+<p>
+    Role:
+        <a href="<?php echo $this->url('role', array('action' => 'view', 'id' => $user->getRoles()->getId())); ?>">
+            <?php echo $user->getRoles()->getRoleId(); ?>
+        </a>
+</p>
+<div class="panel">
+    <h4>Api Key:</h4>
+    <input type="text" value="<?php echo ($user->getApiKey()) ? $user->getApiKey()->getKeyValue(): 'Key not set.'; ?>" />
+
+    <?php
+        $form = $this->form;
+        $form->setAttribute('action', $this->url('useradmin', array('action' => 'view', 'id' => $user->getId())));
+        $form->prepare();
+
+        echo $this->form()->openTag($form) . PHP_EOL;
+        echo $this->formHidden($form->get('csrf')) . PHP_EOL;
+        echo $this->formInput($form->get('submit')) . PHP_EOL;
+        echo $this->form()->closeTag($form) . PHP_EOL;
+    ;?>
+</div>

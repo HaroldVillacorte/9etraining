@@ -15,6 +15,7 @@ echo $this->form()->openTag($form) . PHP_EOL;
 echo $this->formHidden($form->get('csrf')) . PHP_EOL;
 echo $this->formHidden($form->get('id')) . PHP_EOL;
 echo $this->formRow($form->get('name')) . PHP_EOL;
+echo $this->formRow($form->get('domain_option')) . PHP_EOL;
 echo $this->formInput($form->get('submit')) . PHP_EOL;
 echo $this->form()->closeTag($form) . PHP_EOL;
 

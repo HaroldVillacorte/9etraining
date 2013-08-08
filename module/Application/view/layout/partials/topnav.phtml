@@ -16,150 +16,43 @@
       <!-- Left Nav Section -->
       <ul class="left">
           <li class="divider"></li>
-          
-          <?php if ($this->isAllowed('adminLink', 'view')): ?>          
+
+          <?php if ($this->isAllowed('adminLink', 'view')): ?>
+          <li><a href="<?php echo $this->url('domain'); ?>">Domains</a></li>
+          <li class="divider"></li>
           <li><a href="<?php echo $this->url('category'); ?>">Categories</a></li>
           <li class="divider"></li>
-          <li><a href="<?php echo $this->url('question'); ?>">Questions</a></li>
+          <li><a href="<?php echo $this->url('question'); ?>">All Questions</a></li>
           <li class="divider"></li>
           <?php endif; ?>
-          
+
           <?php if ($this->isAllowed('userLink', 'view')): ?>
           <li class="has-dropdown">
             <a class="active" href="#">Study</a>
             <ul class="dropdown">
                 <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study'); ?>">Study Home Page</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '2',
-                    )); ?>">900 Limitations</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '3',
-                    )); ?>">900 Memory Items</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '4',
-                    )); ?>">900 Emergency Checklist</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '5',
-                    )); ?>">900 Aircraft General</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '6',
-                    )); ?>">900 Doors</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '7',
-                    )); ?>">900 EICAS</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '8',
-                    )); ?>">900 Auxiliary Power Unit</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '9',
-                    )); ?>">900 Electrical</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '10',
-                    )); ?>">900 Powerplant</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '11',
-                    )); ?>">900 Fuel System</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '12',
-                    )); ?>">900 Fire and Overheat</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '13',
-                    )); ?>">900 Pneumatics</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '14',
-                    )); ?>">900 Environmental Control System</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '15',
-                    )); ?>">900 Ice and Rain</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '16',
-                    )); ?>">900 Hydraulic System</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '17',
-                    )); ?>">900 Flight Controls</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '18',
-                    )); ?>">900 Landing Gear</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '19',
-                    )); ?>">900 Flight Instruments</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '20',
-                    )); ?>">900 Navigation</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '21',
-                    )); ?>">900 Auto Flight Control System</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '22',
-                    )); ?>">900 Communications</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '23',
-                    )); ?>">900 O2 and Emergency Equipment</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '24',
-                    )); ?>">900 Lighting</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '25',
-                    )); ?>">900 Flight Management System</a></li>
-                <li class="divider"></li>
-                <li><a href="<?php echo $this->url('study', array(
-                    'action' => 'category',
-                    'id' => '26',
-                    )); ?>">900 System Review</a></li>
-                <li class="divider"></li>
+
+                <!-- Study Link Helper -->
+                <?php echo $this->studyLink(); ?>
+
             </ul>
           </li>
           <li class="divider"></li>
           <?php endif; ?>
+
+          <?php if ($this->isAllowed('superuserLink', 'view')): ?>
+          <li class="has-dropdown">
+              <a class="active" href="#">Admin</a>
+              <ul class="dropdown">
+                  <li class="divider"></li>
+                  <li><a href="<?php echo $this->url('role'); ?>">Roles</a></li>
+                  <li class="divider"></li>
+                  <li><a href="<?php echo $this->url('useradmin'); ?>">All Users</a></li>
+              </ul>
+          </li>
+          <li class="divider"></li>
+          <?php endif; ?>
+
       </ul>
 
       <!-- Right Nav Section -->
