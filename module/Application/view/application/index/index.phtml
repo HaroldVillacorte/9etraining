@@ -1,5 +1,19 @@
-<p>
-    <a class="button large" href="<?php echo $this->url('study'); ?>" title="Study">
-        Study
-    </a>
-</p>
+<h2>News</h2>
+<h4>Great news!  The Android app is now available for download.</h4>
+
+<?php if(!$this->zfcUserIdentity()): ?>
+    <h4>Login for details.</h4>
+    <a class="button large success" href="<?php echo $this->url('zfcuser'); ?>">Login</a>
+<?php endif; ?>
+
+<?php if($this->zfcUserIdentity()): ?>
+    <h6>Just download the file here with your phone and remember the location:</h6>
+    <p><a class="button secondary large" href="bin/9Etraining.apk">Download 9Etraining.apk</a></p>
+    <p>Now first make sure you can install non-playstrore software.  Go to your Settings -> Applications, then make sure to check the checkbox that looks like this:</p>
+    <div class="panel">Unknown sources <input type="checkbox" /></div>
+    <p>Then with your favorite file explorer just navigate to the file and click on it.  The device will ask you if you want to install it then just click yes.  Android Gingerbread (2.3) or higher is required.  If there are any questions or issues just let me know.  If there is enough interest I will release this to the market.  There is also a need for a contributer to input the CRJ 200 data.</p>
+    <p>Oh I almost forgot.  You will need this Api Key:</p>
+    <label for="apiKey">Api Key:</label>
+    <input type="text" value="qdcpf3zo56or" name="apiKey">
+    <p>Everything else remains the same.</p>
+<?php endif; ?>
