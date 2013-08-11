@@ -17,6 +17,7 @@ $this->headTitle($title);
             <th>Id</th>
             <th>Question</th>
             <th>Category</th>
+            <th>Doamin</th>
             <th><a href="<?php echo $this
                 ->url('question', array('action' => 'add', 'id' => (int) $category->getId())); ?>"
                 title="Add a question.">Add +</a></th>
@@ -32,6 +33,11 @@ $this->headTitle($title);
                 </a>
             </td>
             <td><?php echo $this->escapeHtml($question->getCategory()->getName()); ?></td>
+            <td>
+                <a href="<?php echo $this->url('domain', array('action' => 'view', 'id' => (int) $question->getCategory()->getDomain()->getId())); ?>">
+                <?php echo trimString($this->escapeHtml($question->getCategory()->getDomain()->getName())); ?>
+                </a>
+            </td>
             <td>
                 <a href="<?php echo $this->url('question', array('action' => 'edit', 'id' => (int) $question->getId())); ?>"
                    class="label primary small round"
