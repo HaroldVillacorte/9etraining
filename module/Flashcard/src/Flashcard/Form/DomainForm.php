@@ -60,7 +60,6 @@ class DomainForm extends Form
         // Name.
         $name = new InputFilter\Input('name');
         $name->setRequired(true);
-        $name->getValidatorChain()->addByName('AlNum', array('allowWhiteSpace' => true));
         $name->getFilterChain()->attachByName('StripTags');
         $name->getFilterChain()->attachByName('StringTrim');
         $inputFilter->add($name);
