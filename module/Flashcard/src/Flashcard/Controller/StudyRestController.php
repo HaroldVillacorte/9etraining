@@ -4,10 +4,16 @@ namespace Flashcard\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\JsonModel;
+use Zend\Escaper\Escaper;
 
 class StudyRestController extends AbstractRestfulController
 {
     protected $em;
+    protected $escaper;
+    
+    public function __construct() {
+        $this->escaper = new Escaper();
+    }
 
     public function getList()
     {
@@ -71,27 +77,27 @@ class StudyRestController extends AbstractRestfulController
         // Set the domains.
         $i = 0;
         foreach ($domains as $domain){
-            $data['domains'][$i]['id'] = $domain->getId();
-            $data['domains'][$i]['name'] = $domain->getName();
+            $data['domains'][$i]['id'] = (int) $domain->getId();
+            $data['domains'][$i]['name'] = $this->escaper->escapeHtml($domain->getName());
             $i++;
         }
 
         // Set the categories.
         $ii = 0;
         foreach ($categories as $category){
-            $data['categories'][$ii]['id'] = $category->getId();
-            $data['categories'][$ii]['name'] = $category->getName();
-            $data['categories'][$ii]['domainId'] = $category->getDomain()->getId();
+            $data['categories'][$ii]['id'] = (int) $category->getId();
+            $data['categories'][$ii]['name'] = $this->escaper->escapeHtml($category->getName());
+            $data['categories'][$ii]['domainId'] = $this->escaper->escapeHtml($category->getDomain()->getId());
             $ii++;
         }
 
         $iii = 0;
         foreach ($questions as $question){
-            $data['questions'][$iii]['id'] = $question->getId();
-            $data['questions'][$iii]['question'] = $question->getQuestion();
-            $data['questions'][$iii]['answer'] = addslashes($question->getAnswer());
-            $data['questions'][$iii]['note'] = $question->getNote();
-            $data['questions'][$iii]['categoryId'] = $question->getCategory()->getId();
+            $data['questions'][$iii]['id'] = (int) $question->getId();
+            $data['questions'][$iii]['question'] = $this->escaper->escapeHtml($question->getQuestion());
+            $data['questions'][$iii]['answer'] = $this->escaper->escapeHtml($question->getAnswer());
+            $data['questions'][$iii]['note'] = $this->escaper->escapeHtml($question->getNote());
+            $data['questions'][$iii]['categoryId'] = (int) $question->getCategory()->getId();
             $iii++;
         }
 
