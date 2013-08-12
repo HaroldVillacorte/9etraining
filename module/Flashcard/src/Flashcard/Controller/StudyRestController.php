@@ -89,7 +89,7 @@ class StudyRestController extends AbstractRestfulController
         foreach ($questions as $question){
             $data['questions'][$iii]['id'] = $question->getId();
             $data['questions'][$iii]['question'] = $question->getQuestion();
-            $data['questions'][$iii]['answer'] = $question->getAnswer();
+            $data['questions'][$iii]['answer'] = addslashes($question->getAnswer());
             $data['questions'][$iii]['note'] = $question->getNote();
             $data['questions'][$iii]['categoryId'] = $question->getCategory()->getId();
             $iii++;
