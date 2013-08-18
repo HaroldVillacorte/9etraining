@@ -5,6 +5,7 @@ namespace Flashcard\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Flashcard\Form\DomainForm;
+use Flashcard\Form\WeightForm;
 use Flashcard\Entity\Domain;
 use Zend\Paginator\Paginator;
 
@@ -34,30 +35,49 @@ class DomainController extends AbstractActionController
 
         // COUNT QUERY
         $countQuery = 'SELECT COUNT(u.id) FROM Flashcard\Entity\Domain u';
-        $categoriesCount = $this->getEntityManager()->createQuery($countQuery)
+        $domainsCount = $this->getEntityManager()->createQuery($countQuery)
             ->getSingleScalarResult();
 
         // RESULT QUERY
         $resultQuery = 'SELECT u FROM Flashcard\Entity\Domain u';
-        $categories = $this->getEntityManager()->createQuery($resultQuery)
+        $domains = $this->getEntityManager()->createQuery($resultQuery)
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->getResult();
 
-        $paginator = new Paginator(new \Zend\Paginator\Adapter\Null($categoriesCount));
+        foreach ($domains as $domain) {
+            $domain->weightForm = new WeightForm();
+            $domain->weightForm->setAttribute('id', 'weight-' . $domain->getId());
+            $domain->weightForm->get('csrf')->setAttribute('id', 'csrf-' . $domain->getId());
+        }
+
+        $paginator = new Paginator(new \Zend\Paginator\Adapter\Null($domainsCount));
         $paginator->setItemCountPerPage($limit);
         $paginator->setCurrentPageNumber($page);
 
+        $this->addJqueryUi();
+
         return new ViewModel(array(
-            'domains' => $categories,
+            'domains' => $domains,
             'paginator' => $paginator,
         ));
     }
 
     public function addAction()
     {
-        $form = new DomainForm('domain');
-        $form->setValidationGroup('csrf', 'name');
+        // COUNT QUERY
+        $countQuery = 'SELECT COUNT(u.id) FROM Flashcard\Entity\Domain u';
+        $domainCount = $this->getEntityManager()->createQuery($countQuery)
+            ->getSingleScalarResult();
+
+        // Setup domain count.
+        $domainCountArray = array();
+        for ($i = 0; $i < $domainCount + 1; $i++) {
+            $domainCountArray[$i + 1] = $i + 1;
+        }
+
+        $form = new DomainForm('domain', $domainCountArray, $domainCount + 1);
+        $form->setValidationGroup('csrf', 'name', 'weight');
 
         $form->get('submit')->setAttribute('value', 'Add');
 
@@ -68,6 +88,7 @@ class DomainController extends AbstractActionController
             $form->setData($data);
             if ($form->isValid()) {
                 $domain->setName($data['name']);
+                $domain->setWeight($data['weight']);
                 $this->getEntityManager()->persist($domain);
                 try {
                     $this->getEntityManager()->flush();
@@ -99,7 +120,18 @@ class DomainController extends AbstractActionController
             return $this->redirect()->toRoute('domain');
         }
 
-        $form = new DomainForm();
+        // COUNT QUERY
+        $countQuery = 'SELECT COUNT(u.id) FROM Flashcard\Entity\Domain u';
+        $domainCount = $this->getEntityManager()->createQuery($countQuery)
+            ->getSingleScalarResult();
+
+        // Setup domain count.
+        $domainCountArray = array();
+        for ($i = 0; $i < $domainCount; $i++) {
+            $domainCountArray[$i + 1] = $i + 1;
+        }
+
+        $form = new DomainForm('domain', $domainCountArray, $domain->getWeight());
 
         $form->setBindOnValidate(false);
         $form->bind($domain);
@@ -113,6 +145,7 @@ class DomainController extends AbstractActionController
             if ($form->isValid())
             {
                 $domain->setName($data['name']);
+                $domain->setWeight($data['weight']);
                 try {
                     $this->getEntityManager()->flush();
                     $this->flashMessenger()->setNamespace('success')
@@ -227,6 +260,15 @@ class DomainController extends AbstractActionController
             $this->em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         }
         return $this->em;
+    }
+
+    public function addJqueryUi()
+    {
+        $viewHelperJs = $this->getServiceLocator()->get('viewhelpermanager')->get('HeadScript');
+        $viewHelperJs->appendFile('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js');
+
+        $viewHelperCss = $this->getServiceLocator()->get('viewhelpermanager')->get('HeadLink');
+        $viewHelperCss->appendStylesheet('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/overcast/jquery-ui.css');
     }
 
 }

@@ -42,16 +42,18 @@ form ul {
 input.input-error, textarea.input-error {
     border: thin solid red;
 }
-
 form label span.custom {
     margin-right: 5px;
+}
+.weight-form {
+    margin: 0;
 }
 
 /************************************************************************************
     QUESTIONS
 ************************************************************************************/
 
-#qna-panel table ul{
+#qna-panel table ul {
     padding-left: 15px;
 }
 
@@ -59,8 +61,7 @@ form label span.custom {
     AJAX
 ************************************************************************************/
 
-#load-gif
-{
+#load-gif {
     position: relative;
     left: 50%;
 }

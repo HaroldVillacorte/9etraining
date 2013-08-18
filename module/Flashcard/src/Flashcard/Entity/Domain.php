@@ -33,6 +33,11 @@ class Domain
      **/
     protected $categories;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $weight;
+
     public function getId()
     {
         return $this->id;
@@ -46,6 +51,16 @@ class Domain
     public function getName()
     {
         return $this->name;
+    }
+
+    public function setWeight($weight)
+    {
+        $this->weight = (int) $weight;
+    }
+
+    public function getWeight()
+    {
+        return $this->weight;
     }
 
     public function getCategories()

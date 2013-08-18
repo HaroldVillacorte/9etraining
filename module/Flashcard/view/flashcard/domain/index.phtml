@@ -6,14 +6,25 @@ $this->headTitle($title);
 <table border="0" width="100%">
     <thead>
         <tr>
+            <th>Wt</th>
             <th>Id</th>
             <th>Name</th>
             <th><a href="<?php echo $this->url('domain', array('action' => 'add')); ?>" title="Add a domain.">Add +</a></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="sortable">
         <?php foreach($domains as $domain): ?>
-        <tr>
+        <tr id="<?php echo $domain->getId(); ?>">
+            <td>
+                <span class="weight-button handle"><?php echo (int) $domain->getWeight(); ?></span>
+                <?php
+                $domain->weightForm->setAttribute('action', $this->url('domain', array('action' => 'index')));
+                $domain->weightForm->prepare();
+                echo $this->form()->openTag($domain->weightForm) . PHP_EOL;
+                echo $this->formHidden($domain->weightForm->get('csrf')) . PHP_EOL;
+                echo $this->form()->closeTag($domain->weightForm) . PHP_EOL;
+                ;?>
+            </td>
             <td><?php echo (int) $domain->getId(); ?></td>
             <td>
                 <a href="<?php echo $this->url('domain', array('action' => 'view', 'id' => (int) $domain->getId())); ?>">

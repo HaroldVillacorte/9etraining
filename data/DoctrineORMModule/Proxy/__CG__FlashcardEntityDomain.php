@@ -78,7 +78,7 @@ class Domain extends \Flashcard\Entity\Domain implements \Doctrine\ORM\Proxy\Pro
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'name', 'categories');
+        return array('__isInitialized__', 'id', 'name', 'weight', 'categories');
     }
 
     public function __clone()

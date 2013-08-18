@@ -18,6 +18,39 @@ $(document).ready(function() {
         $(qnaPanel).attr('sequence', $(questions[0]).attr('sequence'));
     }
 
+    // Weight Buttons.
+    $('.weight-button').button({
+        icons: {
+            primary: 'ui-icon-arrowthick-2-n-s'
+        }
+    });
+
+    $('#sortable').sortable({
+        handle: '.handle'
+    });
+
+});
+
+// Drop handler.
+$('#sortable').on('sortstop', function(event, ui)
+{
+    var weights = $('#sortable').sortable('toArray');
+
+    // Loop through the sortable array.
+    for (var i = 0; i < weights.length; i++)
+    {
+        var tableRow = document.getElementById(weights[i]);
+        var domainId = weights[i];
+        var tableForm = document.getElementById('weight-' + domainId);
+        var actionLink = $(tableForm).attr('action');
+        var csrf = $(document.getElementById('csrf-' + domainId)).val();
+
+        console.log(i + '-' + domainId  + '-' + csrf + '-' + actionLink);
+        // Run the $.post() function for each link.
+        /*$.post(actionLink, { id: domainId, csrf: csrf, weight: i + 1}, function(result) {
+
+        });*/
+    }
 });
 
 $('#show-answer-button').on('click', function(event) {
