@@ -39,12 +39,13 @@ class DomainController extends AbstractActionController
             ->getSingleScalarResult();
 
         // RESULT QUERY
-        $resultQuery = 'SELECT u FROM Flashcard\Entity\Domain u';
+        $resultQuery = 'SELECT u FROM Flashcard\Entity\Domain u ORDER BY u.weight ASC';
         $domains = $this->getEntityManager()->createQuery($resultQuery)
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->getResult();
 
+        // Set the hidden weight forms.
         foreach ($domains as $domain) {
             $domain->weightForm = new WeightForm();
             $domain->weightForm->setAttribute('id', 'weight-' . $domain->getId());
@@ -60,6 +61,7 @@ class DomainController extends AbstractActionController
         return new ViewModel(array(
             'domains' => $domains,
             'paginator' => $paginator,
+            'offset' => $offset,
         ));
     }
 
@@ -231,21 +233,31 @@ class DomainController extends AbstractActionController
             ->getSingleScalarResult();
 
         // RESULT QUERY
-        $resultQuery = "SELECT u FROM Flashcard\Entity\Category u WHERE u.domain={$domain_id}";
+        $resultQuery = "SELECT u FROM Flashcard\Entity\Category u WHERE u.domain={$domain_id} ORDER BY u.weight ASC";
         $categories = $this->getEntityManager()->createQuery($resultQuery)
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->getResult();
+        
+        // Set the hidden weight forms.
+        foreach ($categories as $category) {
+            $category->weightForm = new WeightForm();
+            $category->weightForm->setAttribute('id', 'weight-' . $category->getId());
+            $category->weightForm->get('csrf')->setAttribute('id', 'csrf-' . $category->getId());
+        }
 
         $paginator = new Paginator(new \Zend\Paginator\Adapter\Null($categoriesCount));
         $paginator->setItemCountPerPage($limit);
         $paginator->setCurrentPageNumber($page);
+        
+        $this->addJqueryUi();
 
         return new ViewModel(array(
             'categories' => $categories,
             'paginator' => $paginator,
             'domain_id' => $domain_id,
             'domain' => $domain,
+            'offset' => $offset,
         ));
     }
 

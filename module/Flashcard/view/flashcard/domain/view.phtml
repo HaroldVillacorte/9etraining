@@ -14,6 +14,7 @@ $this->headTitle($title);
 <table border="0" width="100%">
     <thead>
         <tr>
+            <th>Wt</th>
             <th>Id</th>
             <th>Category</th>
             <th>Domain</th>
@@ -22,9 +23,22 @@ $this->headTitle($title);
                 title="Add a category.">Add +</a></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="sortable">
         <?php foreach($categories as $category): ?>
-        <tr>
+        <tr id="<?php echo $category->getId(); ?>" entity="Category" offset="<?php echo $offset; ?>">
+            <td>
+                <span id="weight-button-<?php echo (int) $category->getID(); ?>"
+                        class="weight-button handle">
+                    <?php echo (int) $category->getWeight(); ?>
+                </span>
+                <?php
+                $category->weightForm->setAttribute('action', $this->url('weight-rest'));
+                $category->weightForm->prepare();
+                echo $this->form()->openTag($category->weightForm) . PHP_EOL;
+                echo $this->formHidden($category->weightForm->get('csrf')) . PHP_EOL;
+                echo $this->form()->closeTag($category->weightForm) . PHP_EOL;
+                ;?>
+            </td>
             <td><?php echo (int) $category->getId(); ?></td>
             <td>
                 <a href="<?php echo $this->url('category', array('action' => 'view', 'id' => (int) $category->getId())); ?>">

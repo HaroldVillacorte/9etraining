@@ -8,8 +8,9 @@ return array(
             'Flashcard\Controller\Domain' => 'Flashcard\Controller\DomainController',
             'Flashcard\Controller\Category' => 'Flashcard\Controller\CategoryController',
             'Flashcard\Controller\Question' => 'Flashcard\Controller\QuestionController',
-            'Flashcard\Controller\Study' => 'Flashcard\Controller\StudyController',
+            'Flashcard\Controller\Study' => 'Flashcard\Controller\StudyController',            
             'Flashcard\Controller\StudyRest' => 'Flashcard\Controller\StudyRestController',
+            'Flashcard\Controller\WeightRest' => 'Flashcard\Controller\WeightRestController',
         ),
     ),
 
@@ -138,6 +139,18 @@ return array(
                     ),
                     'defaults' => array(
                         'controller' => 'Flashcard\Controller\StudyRest',
+                    ),
+                ),
+            ),
+            'weight-rest' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/weight-rest[/:id]',
+                    'constraints' => array(
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Flashcard\Controller\WeightRest',
                     ),
                 ),
             ),

@@ -5,6 +5,7 @@ namespace Flashcard\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Flashcard\Form\CategoryForm;
+use Flashcard\Form\WeightForm;
 use Flashcard\Entity\Category;
 use Zend\Paginator\Paginator;
 
@@ -233,16 +234,26 @@ class CategoryController extends AbstractActionController
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->getResult();
+        
+        // Set the hidden weight forms.
+        foreach ($questions as $question) {
+            $question->weightForm = new WeightForm();
+            $question->weightForm->setAttribute('id', 'weight-' . $question->getId());
+            $question->weightForm->get('csrf')->setAttribute('id', 'csrf-' . $question->getId());
+        }
 
         $paginator = new Paginator(new \Zend\Paginator\Adapter\Null($questionsCount));
         $paginator->setItemCountPerPage($limit);
         $paginator->setCurrentPageNumber($page);
+        
+        $this->addJqueryUi();
 
         return new ViewModel(array(
             'questions' => $questions,
             'paginator' => $paginator,
             'category_id' => $category_id,
             'category' => $category,
+            'offset' => $offset,
         ));
     }
 
@@ -257,6 +268,15 @@ class CategoryController extends AbstractActionController
             $this->em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         }
         return $this->em;
+    }
+    
+    public function addJqueryUi()
+    {
+        $viewHelperJs = $this->getServiceLocator()->get('viewhelpermanager')->get('HeadScript');
+        $viewHelperJs->appendFile('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js');
+
+        $viewHelperCss = $this->getServiceLocator()->get('viewhelpermanager')->get('HeadLink');
+        $viewHelperCss->appendStylesheet('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/overcast/jquery-ui.css');
     }
 
 }

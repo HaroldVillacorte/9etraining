@@ -63,6 +63,18 @@ class Domain extends \Flashcard\Entity\Domain implements \Doctrine\ORM\Proxy\Pro
         return parent::getName();
     }
 
+    public function setWeight($weight)
+    {
+        $this->__load();
+        return parent::setWeight($weight);
+    }
+
+    public function getWeight()
+    {
+        $this->__load();
+        return parent::getWeight();
+    }
+
     public function getCategories()
     {
         $this->__load();

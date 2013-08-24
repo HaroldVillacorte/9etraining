@@ -14,11 +14,14 @@ $this->headTitle($title);
     </thead>
     <tbody id="sortable">
         <?php foreach($domains as $domain): ?>
-        <tr id="<?php echo $domain->getId(); ?>">
+        <tr id="<?php echo $domain->getId(); ?>" entity="Domain" offset="<?php echo $offset; ?>">
             <td>
-                <span class="weight-button handle"><?php echo (int) $domain->getWeight(); ?></span>
+                <span id="weight-button-<?php echo (int) $domain->getID(); ?>"
+                      class="weight-button handle">
+                          <?php echo (int) $domain->getWeight(); ?>
+                </span>
                 <?php
-                $domain->weightForm->setAttribute('action', $this->url('domain', array('action' => 'index')));
+                $domain->weightForm->setAttribute('action', $this->url('weight-rest'));
                 $domain->weightForm->prepare();
                 echo $this->form()->openTag($domain->weightForm) . PHP_EOL;
                 echo $this->formHidden($domain->weightForm->get('csrf')) . PHP_EOL;

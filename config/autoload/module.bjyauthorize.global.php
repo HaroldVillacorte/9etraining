@@ -87,6 +87,7 @@ return array(
                 array('route' => 'questionByCategory', 'roles' => array('admin')),
                 array('route' => 'study', 'roles' => array('user')),
                 array('route' => 'study-rest', 'roles' => array('guest')),
+                array('route' => 'weight-rest', 'roles' => array('admin')),
             ),
         ),
 

@@ -14,6 +14,7 @@ $this->headTitle($title);
 <table border="0" width="100%">
     <thead>
         <tr>
+            <th>Wt</th>
             <th>Id</th>
             <th>Question</th>
             <th>Category</th>
@@ -23,6 +24,7 @@ $this->headTitle($title);
     <tbody>
         <?php foreach($questions as $question): ?>
         <tr>
+            <td><?php echo (int) $question->getWeight(); ?></td>
             <td><?php echo (int) $question->getId(); ?></td>
             <td>
                 <a href="<?php echo $this->url('question', array('action' => 'view', 'id' => (int) $question->getId())); ?>">

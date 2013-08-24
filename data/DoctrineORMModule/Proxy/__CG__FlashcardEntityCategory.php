@@ -81,6 +81,18 @@ class Category extends \Flashcard\Entity\Category implements \Doctrine\ORM\Proxy
         return parent::setName($name);
     }
 
+    public function setWeight($weight)
+    {
+        $this->__load();
+        return parent::setWeight($weight);
+    }
+
+    public function getWeight()
+    {
+        $this->__load();
+        return parent::getWeight();
+    }
+
     public function getArrayCopy()
     {
         $this->__load();
@@ -90,7 +102,7 @@ class Category extends \Flashcard\Entity\Category implements \Doctrine\ORM\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'name', 'questions', 'domain');
+        return array('__isInitialized__', 'id', 'name', 'weight', 'questions', 'domain');
     }
 
     public function __clone()

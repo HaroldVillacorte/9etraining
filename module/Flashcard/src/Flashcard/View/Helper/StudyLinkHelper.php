@@ -11,10 +11,8 @@ class StudyLinkHelper extends AbstractHelper
 
     public function __invoke()
     {
-        $domains = $this
-            ->getEntityManager()
-            ->getRepository('Flashcard\Entity\Domain')
-            ->findAll();
+        $domainQuery = 'SELECT u FROM Flashcard\Entity\Domain u ORDER BY u.weight ASC';
+        $domains = $this->getEntityManager()->createQuery($domainQuery)->getResult();
 
         $url = $this->view->plugin('url');
 
@@ -22,10 +20,14 @@ class StudyLinkHelper extends AbstractHelper
 
         foreach ($domains as $domain)
         {
+            $domainId = $domain->getId();
+            $categoriesQuery = "SELECT u FROM Flashcard\Entity\Category u WHERE u.domain = {$domainId} ORDER BY u.weight ASC";
+            $catgories = $this->getEntityManager()->createQuery($categoriesQuery)->getResult();
+
             $links .= '<li class="has-dropdown">';
             $links .= '<a href="#">' . $domain->getName() . '</a>';
             $links .= '<ul class="dropdown">';
-            foreach ($domain->getCategories() as $category)
+            foreach ($catgories as $category)
             {
                 $links .= '<li><a href="' .
                 $url('study', array('action' => 'category', 'id' => $category->getId())) .

@@ -10,7 +10,7 @@ class StudyRestController extends AbstractRestfulController
 {
     protected $em;
     protected $escaper;
-    
+
     public function __construct() {
         $this->escaper = new Escaper();
     }
@@ -65,14 +65,17 @@ class StudyRestController extends AbstractRestfulController
     {
         $data = array();
 
-        $domains = $this->getEntityManager()->getRepository('Flashcard\Entity\Domain')
-            ->findAll();
+        $domainQuery = 'SELECT u FROM Flashcard\Entity\Domain u ORDER BY u.weight ASC';
+        $domains = $this->getEntityManager()->createQuery($domainQuery)->getResult();
 
-        $categories = $this->getEntityManager()->getRepository('Flashcard\Entity\Category')
-            ->findAll();
+        $categoriesQuery = 'SELECT u FROM Flashcard\Entity\Category u JOIN Flashcard\Entity\Domain d'
+                . ' WHERE d = u.domain ORDER BY d.weight, u.weight ASC';
+        $categories = $this->getEntityManager()->createQuery($categoriesQuery )->getResult();
 
-        $questions = $this->getEntityManager()->getRepository('Flashcard\Entity\Question')
-            ->findAll();
+        $questionsQuery = 'SELECT u FROM Flashcard\Entity\Question u JOIN Flashcard\Entity\Categgory c'
+                . ' WHERE c = u.category JOIN Flashcard\Entity\Domain d WHERE d = c.domain'
+                . ' ORDER BY d.weight, c.weight, u.weight ASC';
+        $questions = $this->getEntityManager()->createQuery($questionsQuery )->getResult();
 
         // Set the domains.
         $i = 0;

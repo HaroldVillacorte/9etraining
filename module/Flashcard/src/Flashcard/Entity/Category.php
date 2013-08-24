@@ -38,6 +38,11 @@ class Category
      * @ORM\ManyToOne(targetEntity="Domain", inversedBy="categories")
      */
     protected $domain;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $weight;
 
     // GETTERS
 
@@ -72,8 +77,16 @@ class Category
     {
         $this->name = (string) $name;
     }
+    
+    public function setWeight($weight)
+    {
+        $this->weight = (int) $weight;
+    }
 
-    // UNSETTERS.
+    public function getWeight()
+    {
+        return $this->weight;
+    }
 
     /**
     * Convert the object to an array.

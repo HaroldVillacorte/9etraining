@@ -43,6 +43,11 @@ class Question
     * @ORM\ManyToOne(targetEntity="Category", inversedBy="questions")
     */
     protected $category;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $weight;
 
     // GETTERS
 
@@ -93,11 +98,19 @@ class Question
         $this->category = $category;
     }
 
-    // REMOVERS
-
     public function removeCategory(Category $category)
     {
         $this->category->removeElement($category);
+    }
+    
+    public function setWeight($weight)
+    {
+        $this->weight = (int) $weight;
+    }
+
+    public function getWeight()
+    {
+        return $this->weight;
     }
 
     /**

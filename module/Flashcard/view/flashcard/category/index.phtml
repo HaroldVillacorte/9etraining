@@ -6,6 +6,7 @@ $this->headTitle($title);
 <table border="0" width="100%">
     <thead>
         <tr>
+            <th>Wt</th>
             <th>Id</th>
             <th>Name</th>
             <th>Domain</th>
@@ -15,6 +16,7 @@ $this->headTitle($title);
     <tbody>
         <?php foreach($categories as $category): ?>
         <tr>
+            <td><?php echo (int) $category->getWeight(); ?></td>
             <td><?php echo (int) $category->getId(); ?></td>
             <td>
                 <a href="<?php echo $this->url('category', array('action' => 'view', 'id' => (int) $category->getId())); ?>">
