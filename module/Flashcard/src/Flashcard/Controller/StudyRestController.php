@@ -72,7 +72,7 @@ class StudyRestController extends AbstractRestfulController
                 . ' WHERE d = u.domain ORDER BY d.weight, u.weight ASC';
         $categories = $this->getEntityManager()->createQuery($categoriesQuery )->getResult();
 
-        $questionsQuery = 'SELECT u FROM Flashcard\Entity\Question u JOIN Flashcard\Entity\Categgory c'
+        $questionsQuery = 'SELECT u FROM Flashcard\Entity\Question u JOIN Flashcard\Entity\Category c'
                 . ' WHERE c = u.category JOIN Flashcard\Entity\Domain d WHERE d = c.domain'
                 . ' ORDER BY d.weight, c.weight, u.weight ASC';
         $questions = $this->getEntityManager()->createQuery($questionsQuery )->getResult();
