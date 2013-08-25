@@ -38,6 +38,13 @@
             </ul>
           </li>
           <li class="divider"></li>
+          <!-- Bookmarked -->
+          <li>
+              <a href="<?php echo $this->url('study', array('action' => 'bookmarked')); ?>">
+                  Bookmarked
+              </a>
+          </li>
+          <li class="divider"></li>
           <?php endif; ?>
 
           <?php if ($this->isAllowed('superuserLink', 'view')): ?>

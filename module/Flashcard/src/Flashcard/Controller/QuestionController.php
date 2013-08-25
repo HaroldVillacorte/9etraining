@@ -100,6 +100,9 @@ class QuestionController extends AbstractActionController
                         ->toRoute('category', array('action' => 'view', 'id' => $category->getId()));
             }
         }
+
+        $this->addMarkItUp();
+
         return new ViewModel(array(
             'form' => $form,
         ));
@@ -168,6 +171,8 @@ class QuestionController extends AbstractActionController
             }
         }
 
+        $this->addMarkItUp();
+
         return new ViewModel(array(
             'id' => $id,
             'form' => $form,
@@ -235,6 +240,20 @@ class QuestionController extends AbstractActionController
             $this->em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         }
         return $this->em;
+    }
+
+    public function addMarkItUp()
+    {
+        $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
+        $viewHelperJs = $this->getServiceLocator()->get('viewhelpermanager')->get('HeadScript');
+        $viewHelperCss = $this->getServiceLocator()->get('viewhelpermanager')->get('HeadLink');
+
+        $viewHelperJs->appendFile($renderer->basePath() . '/javascripts/markitup/jquery.markitup.js');
+        $viewHelperJs->appendFile($renderer->basePath() . '/javascripts/markitup/sets/html/set.js');
+        $viewHelperJs->appendFile($renderer->basePath() . '/javascripts/setMarkItUp.js');
+
+        $viewHelperCss->appendStylesheet($renderer->basePath() . '/javascripts/markitup/skins/markitup/style.css');
+        $viewHelperCss->appendStylesheet($renderer->basePath() . '/javascripts/markitup/sets/html/style.css');
     }
 
 }

@@ -234,7 +234,7 @@ class CategoryController extends AbstractActionController
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->getResult();
-        
+
         // Set the hidden weight forms.
         foreach ($questions as $question) {
             $question->weightForm = new WeightForm();
@@ -245,8 +245,8 @@ class CategoryController extends AbstractActionController
         $paginator = new Paginator(new \Zend\Paginator\Adapter\Null($questionsCount));
         $paginator->setItemCountPerPage($limit);
         $paginator->setCurrentPageNumber($page);
-        
-        $this->addJqueryUi();
+
+        $this->addJqueryUiSortableWeight();
 
         return new ViewModel(array(
             'questions' => $questions,
@@ -269,13 +269,16 @@ class CategoryController extends AbstractActionController
         }
         return $this->em;
     }
-    
-    public function addJqueryUi()
-    {
-        $viewHelperJs = $this->getServiceLocator()->get('viewhelpermanager')->get('HeadScript');
-        $viewHelperJs->appendFile('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js');
 
+    public function addJqueryUiSortableWeight()
+    {
+        $renderer = $this->serviceLocator->get('Zend\View\Renderer\RendererInterface');
+        $viewHelperJs = $this->getServiceLocator()->get('viewhelpermanager')->get('HeadScript');
         $viewHelperCss = $this->getServiceLocator()->get('viewhelpermanager')->get('HeadLink');
+
+        $viewHelperJs->appendFile('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js');
+        $viewHelperJs->appendFile($renderer->basePath() . '/javascripts/sortableItems.js');
+
         $viewHelperCss->appendStylesheet('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/overcast/jquery-ui.css');
     }
 

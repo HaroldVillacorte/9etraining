@@ -44,6 +44,13 @@ class StudyController extends AbstractActionController
         ));
     }
 
+    public function bookmarkedAction()
+    {
+        return new ViewModel(array(
+            
+        ));
+    }
+
     public function getEntityManager()
     {
         if (!$this->em)

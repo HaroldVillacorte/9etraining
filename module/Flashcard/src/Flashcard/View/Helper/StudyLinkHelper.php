@@ -36,8 +36,7 @@ class StudyLinkHelper extends AbstractHelper
             }
             $links .= '</ul>';
             $links .= '</li>';
-
-
+            $links .= '<li class="divider"></li>';
         }
 
         return $links;

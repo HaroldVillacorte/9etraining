@@ -23,10 +23,9 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <?php echo $this->headScript()
     ->prependFile($this->basePath() . '/javascripts/foundation3/app.js')
+    ->prependFile($this->basePath() . '/javascripts/foundation3/jquery.foundation.tabs.js')
     ->prependFile($this->basePath() . '/javascripts/foundation3/jquery.foundation.forms.js')
     ->prependFile($this->basePath() . '/javascripts/foundation3/jquery.foundation.topbar.js')
-    ->prependFile($this->basePath() . '/javascripts/markitup/sets/html/set.js')
-    ->prependFile($this->basePath() . '/javascripts/markitup/jquery.markitup.js')
     //->prependFile($this->basePath() . '/javascripts/foundation3/jquery.js')
 ;?>
 <script type="text/javascript" src="<?php echo $this->basePath() . '/javascripts/9etraining-ajax.js'; ?>"></script>
