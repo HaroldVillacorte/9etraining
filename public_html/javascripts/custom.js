@@ -1,27 +1,35 @@
 // Functions.
-setFirstQuestion = function() {
+replaceQuotes = function(string) {
+    return string.replace(/"/g, '&quot;');
+};
+
+setQnaPanel = function(question) {
     var qnaPanel = document.getElementById('qna-panel');
+    $(qnaPanel).html($(question).val());
+    $(qnaPanel).attr('name', $(question).attr('name'));
+    $(qnaPanel).attr('question', $(question).val());
+    $(qnaPanel).attr('answer', $(question).attr('answer'));
+    $(qnaPanel).attr('note', $(question).attr('note'));
+    $(qnaPanel).attr('sequence', $(question).attr('sequence'));
+
     var questions = $('.question');
     if (questions.length > 0) {
-        $(qnaPanel).html($(questions[0]).val());
-        $(qnaPanel).attr('name', $(questions[0]).attr('name'));
-        $(qnaPanel).attr('question', $(questions[0]).val());
-        $(qnaPanel).attr('answer', $(questions[0]).attr('answer'));
-        $(qnaPanel).attr('note', $(questions[0]).attr('note'));
-        $(qnaPanel).attr('sequence', $(questions[0]).attr('sequence'));
     }
     else if (questions.length === 0 || !questions) {
-         $(qnaPanel).html('Question list is empty.');
-         $(qnaPanel).attr('name', 'empty');
-         $(qnaPanel).removeAttr('question');
-         $(qnaPanel).removeAttr('answer');
-         $(qnaPanel).removeAttr('note');
-         $(qnaPanel).removeAttr('sequence');
     }
 };
 
+clearQnaPanel = function() {
+    var qnaPanel = document.getElementById('qna-panel');
+    $(qnaPanel).html('Question list is empty.');
+    $(qnaPanel).attr('name', 'empty');
+    $(qnaPanel).removeAttr('question');
+    $(qnaPanel).removeAttr('answer');
+    $(qnaPanel).removeAttr('note');
+    $(qnaPanel).removeAttr('sequence');
+}
+
 setQuickSelectList = function() {
-    // Quick select links.
     var questions = $('.question');
     var quickSelectList = document.getElementById('quick-select-list');
     var quickSelectListLi = quickSelectList.getElementsByTagName('li');
@@ -36,7 +44,6 @@ setQuickSelectList = function() {
 };
 
 setBookmarked = function() {
-    // Set bookmarked questions study page.
     var bookmarkedQuestionList = document.getElementById('bookmarked-question-list')
     if (bookmarkedQuestionList) {
         $(bookmarkedQuestionList).html('');
@@ -44,9 +51,9 @@ setBookmarked = function() {
         for (var i = 0; i < bookmarkedQuestions.length; i++) {
             var questionInput = '<input type="hidden" class="question"' +
                     ' name="' + bookmarkedQuestions[i].name + '"' +
-                    ' value="' + bookmarkedQuestions[i].value + '"' +
-                    ' answer="' + bookmarkedQuestions[i].answer + '"' +
-                    ' note="' + bookmarkedQuestions[i].note + '"' +
+                    ' value="' + replaceQuotes(bookmarkedQuestions[i].value) + '"' +
+                    ' answer="' + replaceQuotes(bookmarkedQuestions[i].answer) + '"' +
+                    ' note="' + replaceQuotes(bookmarkedQuestions[i].note) + '"' +
                     ' sequence="' + i + '" />';
             $('#bookmarked-question-list').append(questionInput);
         }
@@ -54,7 +61,6 @@ setBookmarked = function() {
 };
 
 setMarked = function() {
-    // Set marked.
     var markedUl = document.getElementById('marked-ul');
     if (!localStorage.getItem('marked')) {
         var marked = [];
@@ -71,15 +77,21 @@ setMarked = function() {
     }
 };
 
+// Document Raadey Event.
 $(document).ready(function() {
-
     var showQuestionButton = document.getElementById('show-question-button');
 
     $(showQuestionButton).hide();
 
     setBookmarked();
 
-    setFirstQuestion();
+    var questions = $('.question');
+    if (questions.length > 0) {
+        setQnaPanel(questions[0]);
+    }
+    else if (questions.length === 0 || !questions) {
+        clearQnaPanel();
+    }
 
     setQuickSelectList();
 
@@ -124,16 +136,12 @@ $('#next-button').on('click', function(event) {
         var nextSequence = parseInt($(qnaPanel).attr('sequence')) + 1;
         var nextQuestion = $('.question[sequence="' + nextSequence +'"]');
 
-        $(qnaPanel).html($(nextQuestion).val());
-
         if (parseInt($(qnaPanel).attr('sequence')) ===  $('.question').size() -1) {
             alert('That was the last question.  Your ninja skills have improved by ten points.');
         }
 
-        $(qnaPanel).attr('question', $(nextQuestion).val());
-        $(qnaPanel).attr('name', $(nextQuestion).attr('name'));
-        $(qnaPanel).attr('answer', $(nextQuestion).attr('answer'));
-        $(qnaPanel).attr('note', $(nextQuestion).attr('note'));
+        setQnaPanel(nextQuestion);
+
         if (parseInt($(qnaPanel).attr('sequence')) !==  $('.question').size() -1) {
             $(qnaPanel).attr('sequence', parseInt($(qnaPanel).attr('sequence')) + 1);
         }
@@ -160,11 +168,8 @@ $('#prev-button').on('click', function(event) {
             alert('Oops...this is the first question.  Go the other way.');
         }
 
-        $(qnaPanel).html($(prevQuestion).val());
-        $(qnaPanel).attr('question', $(prevQuestion).val());
-        $(qnaPanel).attr('name', $(prevQuestion).attr('name'));
-        $(qnaPanel).attr('answer', $(prevQuestion).attr('answer'));
-        $(qnaPanel).attr('note', $(prevQuestion).attr('note'));
+        setQnaPanel(prevQuestion);
+
         if ((parseInt($(qnaPanel).attr('sequence')) - 1) !== -1) {
             $(qnaPanel).attr('sequence', parseInt($(qnaPanel).attr('sequence')) - 1);
         }
@@ -185,15 +190,10 @@ $('#quick-select-list').on('click', '.quick-select-link', function(event) {
     //event.preventDefault();
     var sequence = parseInt($(this).attr('sequence'));
     var theQuestion = $('.question[sequence="' + sequence +'"]');
-    var qnaPanel = document.getElementById('qna-panel');
     var showAnswerButton = document.getElementById('show-answer-button');
     var showQuestionButton = document.getElementById('show-question-button');
 
-    $(qnaPanel).html($(theQuestion).val());
-    $(qnaPanel).attr('question', $(theQuestion).val());
-    $(qnaPanel).attr('answer', $(theQuestion).attr('answer'));
-    $(qnaPanel).attr('note', $(theQuestion).attr('note'));
-    $(qnaPanel).attr('sequence', $(theQuestion).attr('sequence'));
+    setQnaPanel(theQuestion);
 
     $(showAnswerButton).show();
     $(showQuestionButton).hide();
@@ -250,5 +250,11 @@ $('#marked-ul').on('click', '.mark-it-remove',function(event) {
 
     setQuickSelectList();
 
-    setFirstQuestion();
+    var questions = $('.question');
+    if (questions.length > 0) {
+        setQnaPanel(questions[0]);
+    }
+    else if (questions.length === 0 || !questions) {
+        clearQnaPanel();
+    }
 });
