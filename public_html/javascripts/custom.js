@@ -10,8 +10,13 @@ setFirstQuestion = function() {
         $(qnaPanel).attr('note', $(questions[0]).attr('note'));
         $(qnaPanel).attr('sequence', $(questions[0]).attr('sequence'));
     }
-    else {
+    else if (questions.length === 0 || !questions) {
          $(qnaPanel).html('Question list is empty.');
+         $(qnaPanel).attr('name', 'empty');
+         $(qnaPanel).removeAttr('question');
+         $(qnaPanel).removeAttr('answer');
+         $(qnaPanel).removeAttr('note');
+         $(qnaPanel).removeAttr('sequence');
     }
 };
 
@@ -86,13 +91,19 @@ $(document).ready(function() {
 $('#show-answer-button').on('click', function(event) {
     event.preventDefault();
     var qnaPanel = document.getElementById('qna-panel');
-    var showQuestionButton = document.getElementById('show-question-button');
-    $(qnaPanel).html($('#qna-panel').attr('answer'));
-    if ($(qnaPanel).attr('note') !== '') {
-        $(qnaPanel).append('<br/><strong>Note:</strong><br/>' + $(qnaPanel).attr('note'));
+    if ($(qnaPanel).attr('name') !== 'empty') {
+        var showQuestionButton = document.getElementById('show-question-button');
+        var qnaPanelNote = $(qnaPanel).attr('note');
+        $(qnaPanel).html($('#qna-panel').attr('answer'));
+        if (qnaPanelNote) {
+            $(qnaPanel).append('<br/><strong>Note:</strong><br/>' + $(qnaPanel).attr('note'));
+        }
+        $(this).hide();
+        $(showQuestionButton).show();
     }
-    $(this).hide();
-    $(showQuestionButton).show();
+    else {
+        alert('Question list is empty.');
+    }
 });
 
 // Show question button.
@@ -109,54 +120,64 @@ $('#show-question-button').on('click', function(event) {
 $('#next-button').on('click', function(event) {
     event.preventDefault();
     var qnaPanel = document.getElementById('qna-panel');
-    var nextSequence = parseInt($(qnaPanel).attr('sequence')) + 1;
-    var nextQuestion = $('.question[sequence="' + nextSequence +'"]');
+    if ($(qnaPanel).attr('name') !== 'empty') {
+        var nextSequence = parseInt($(qnaPanel).attr('sequence')) + 1;
+        var nextQuestion = $('.question[sequence="' + nextSequence +'"]');
 
-    $(qnaPanel).html($(nextQuestion).val());
+        $(qnaPanel).html($(nextQuestion).val());
 
-    if (parseInt($(qnaPanel).attr('sequence')) ===  $('.question').size() -1) {
-        alert('That was the last question.  Your ninja skills have improved by ten points.');
+        if (parseInt($(qnaPanel).attr('sequence')) ===  $('.question').size() -1) {
+            alert('That was the last question.  Your ninja skills have improved by ten points.');
+        }
+
+        $(qnaPanel).attr('question', $(nextQuestion).val());
+        $(qnaPanel).attr('name', $(nextQuestion).attr('name'));
+        $(qnaPanel).attr('answer', $(nextQuestion).attr('answer'));
+        $(qnaPanel).attr('note', $(nextQuestion).attr('note'));
+        if (parseInt($(qnaPanel).attr('sequence')) !==  $('.question').size() -1) {
+            $(qnaPanel).attr('sequence', parseInt($(qnaPanel).attr('sequence')) + 1);
+        }
+
+        var showAnswerButton = document.getElementById('show-answer-button');
+        var showQuestionButton = document.getElementById('show-question-button');
+        $(showAnswerButton).show();
+        $(showQuestionButton).hide();
     }
-
-    $(qnaPanel).attr('question', $(nextQuestion).val());
-    $(qnaPanel).attr('name', $(nextQuestion).attr('name'));
-    $(qnaPanel).attr('answer', $(nextQuestion).attr('answer'));
-    $(qnaPanel).attr('note', $(nextQuestion).attr('note'));
-    if (parseInt($(qnaPanel).attr('sequence')) !==  $('.question').size() -1) {
-        $(qnaPanel).attr('sequence', parseInt($(qnaPanel).attr('sequence')) + 1);
+    else {
+        alert('Question list is empty.');
     }
-
-    var showAnswerButton = document.getElementById('show-answer-button');
-    var showQuestionButton = document.getElementById('show-question-button');
-    $(showAnswerButton).show();
-    $(showQuestionButton).hide();
 });
 
 // Previous Button.
 $('#prev-button').on('click', function(event) {
     event.preventDefault();
     var qnaPanel = document.getElementById('qna-panel');
-    var prevSequence = parseInt($(qnaPanel).attr('sequence')) - 1;
-    var prevQuestion = $('.question[sequence="' + prevSequence +'"]');
+    if ($(qnaPanel).attr('name') !== 'empty') {
+        var prevSequence = parseInt($(qnaPanel).attr('sequence')) - 1;
+        var prevQuestion = $('.question[sequence="' + prevSequence +'"]');
 
-    if ((parseInt($(qnaPanel).attr('sequence')) - 1) === -1) {
-        alert('Oops...this is the first question.  Go the other way.');
+        if ((parseInt($(qnaPanel).attr('sequence')) - 1) === -1) {
+            alert('Oops...this is the first question.  Go the other way.');
+        }
+
+        $(qnaPanel).html($(prevQuestion).val());
+        $(qnaPanel).attr('question', $(prevQuestion).val());
+        $(qnaPanel).attr('name', $(prevQuestion).attr('name'));
+        $(qnaPanel).attr('answer', $(prevQuestion).attr('answer'));
+        $(qnaPanel).attr('note', $(prevQuestion).attr('note'));
+        if ((parseInt($(qnaPanel).attr('sequence')) - 1) !== -1) {
+            $(qnaPanel).attr('sequence', parseInt($(qnaPanel).attr('sequence')) - 1);
+        }
+
+        var showAnswerButton = document.getElementById('show-answer-button');
+        var showQuestionButton = document.getElementById('show-question-button');
+
+        $(showAnswerButton).show();
+        $(showQuestionButton).hide();
     }
-
-    $(qnaPanel).html($(prevQuestion).val());
-    $(qnaPanel).attr('question', $(prevQuestion).val());
-    $(qnaPanel).attr('name', $(prevQuestion).attr('name'));
-    $(qnaPanel).attr('answer', $(prevQuestion).attr('answer'));
-    $(qnaPanel).attr('note', $(prevQuestion).attr('note'));
-    if ((parseInt($(qnaPanel).attr('sequence')) - 1) !== -1) {
-        $(qnaPanel).attr('sequence', parseInt($(qnaPanel).attr('sequence')) - 1);
+    else {
+        alert('Question list is empty.');
     }
-
-    var showAnswerButton = document.getElementById('show-answer-button');
-    var showQuestionButton = document.getElementById('show-question-button');
-
-    $(showAnswerButton).show();
-    $(showQuestionButton).hide();
 });
 
 // Quick select list click.
@@ -181,30 +202,34 @@ $('#quick-select-list').on('click', '.quick-select-link', function(event) {
 // Bookmark it.
 $('#mark-it').on('click', function() {
     var qnaPanel = document.getElementById('qna-panel');
-    var markedUl = document.getElementById('marked-ul');
 
-    var marked = JSON.parse(localStorage.getItem('marked'));
-    var questionName = $(qnaPanel).attr('name');
-    var theQuestion = $('.question[name="'+ questionName + '"]');
-    var questionValue = $(theQuestion).val();
-    var questionAnswer = $(theQuestion).attr('answer');
-    var questionNote = $(theQuestion).attr('note');
+    if ($(qnaPanel).attr('name') !== 'empty') {
+        var markedUl = document.getElementById('marked-ul');
+        var marked = JSON.parse(localStorage.getItem('marked'));
+        var questionName = $(qnaPanel).attr('name');
+        var theQuestion = $('.question[name="'+ questionName + '"]');
+        var questionValue = $(theQuestion).val();
+        var questionAnswer = $(theQuestion).attr('answer');
+        var questionNote = $(theQuestion).attr('note');
 
-    $(markedUl).html('');
-    marked.push({
-        name: questionName,
-        value: questionValue,
-        answer: questionAnswer,
-        note: questionNote
-    });
+        $(markedUl).html('');
+        marked.push({
+            name: questionName,
+            value: questionValue,
+            answer: questionAnswer,
+            note: questionNote
+        });
+        localStorage.setItem('marked', JSON.stringify(marked));
 
-    localStorage.setItem('marked', JSON.stringify(marked));
-
-    var newMarked = JSON.parse(localStorage.getItem('marked'));
-    for (var i = 0; i < newMarked.length; i++) {
-        $(markedUl).append('<li>' + newMarked[i].value +
-                '&nbsp;<a href="#" class="label secondary small mark-it-remove" sequence="' +
-                i + '">Remove</a></li>');
+        var newMarked = JSON.parse(localStorage.getItem('marked'));
+        for (var i = 0; i < newMarked.length; i++) {
+            $(markedUl).append('<li>' + newMarked[i].value +
+                    '&nbsp;<a href="#" class="label secondary small mark-it-remove" sequence="' +
+                    i + '">Remove</a></li>');
+        }
+    }
+    else {
+        alert('Question list is empty.');
     }
 });
 
