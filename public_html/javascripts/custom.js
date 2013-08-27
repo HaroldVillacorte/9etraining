@@ -5,29 +5,31 @@ replaceQuotes = function(string) {
 
 setQnaPanel = function(question) {
     var qnaPanel = document.getElementById('qna-panel');
+    var showQuestionButton = document.getElementById('show-question-button');
+    var showAnswerButton = document.getElementById('show-answer-button');
     $(qnaPanel).html($(question).val());
     $(qnaPanel).attr('name', $(question).attr('name'));
     $(qnaPanel).attr('question', $(question).val());
     $(qnaPanel).attr('answer', $(question).attr('answer'));
     $(qnaPanel).attr('note', $(question).attr('note'));
     $(qnaPanel).attr('sequence', $(question).attr('sequence'));
-
-    var questions = $('.question');
-    if (questions.length > 0) {
-    }
-    else if (questions.length === 0 || !questions) {
-    }
+    $(showQuestionButton).hide();
+    $(showAnswerButton).show();
 };
 
 clearQnaPanel = function() {
     var qnaPanel = document.getElementById('qna-panel');
+    var showQuestionButton = document.getElementById('show-question-button');
+    var showAnswerButton = document.getElementById('show-answer-button');
     $(qnaPanel).html('Question list is empty.');
     $(qnaPanel).attr('name', 'empty');
     $(qnaPanel).removeAttr('question');
     $(qnaPanel).removeAttr('answer');
     $(qnaPanel).removeAttr('note');
     $(qnaPanel).removeAttr('sequence');
-}
+    $(showQuestionButton).hide();
+    $(showAnswerButton).show();
+};
 
 setQuickSelectList = function() {
     var questions = $('.question');
@@ -140,10 +142,9 @@ $('#next-button').on('click', function(event) {
             alert('That was the last question.  Your ninja skills have improved by ten points.');
         }
 
-        setQnaPanel(nextQuestion);
-
         if (parseInt($(qnaPanel).attr('sequence')) !==  $('.question').size() -1) {
             $(qnaPanel).attr('sequence', parseInt($(qnaPanel).attr('sequence')) + 1);
+            setQnaPanel(nextQuestion);
         }
 
         var showAnswerButton = document.getElementById('show-answer-button');
@@ -168,10 +169,9 @@ $('#prev-button').on('click', function(event) {
             alert('Oops...this is the first question.  Go the other way.');
         }
 
-        setQnaPanel(prevQuestion);
-
         if ((parseInt($(qnaPanel).attr('sequence')) - 1) !== -1) {
             $(qnaPanel).attr('sequence', parseInt($(qnaPanel).attr('sequence')) - 1);
+            setQnaPanel(prevQuestion);
         }
 
         var showAnswerButton = document.getElementById('show-answer-button');
