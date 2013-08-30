@@ -8,6 +8,9 @@
 
 <?php if($this->zfcUserIdentity()): ?>
     <h6>Just download the file here with your phone and remember the location:</h6>
+    <strong>This is the one you want:</strong><br/>
+    <p><a class="button secondary large" href="bin/EndeavorTraining.apk">Download EndeavorTraining.apk v1.0</a></p>
+    <strong>This is the old one.  It is now depracated but I will leave it up in case anyone wants it.  It should still work:</strong><br/>
     <p><a class="button secondary large" href="bin/9Etraining.apk">Download 9Etraining.apk</a></p>
     <p>Now, if you are on an older version of Android, first make sure you can install non-playstrore software.  Go to your Settings -> Applications, then make sure to check the checkbox that looks like this:</p>
     <div class="panel"><p>Unknown sources <input type="checkbox" /></p><p>If you do not see this then you don't need to worry about it.</p></div>
@@ -16,6 +19,21 @@
     <label for="apiKey">Api Key:</label>
     <input type="text" value="qdcpf3zo56or" name="apiKey">
     <p>Everything else remains the same.</p>
+
+    <h4>Update: Thursday August 29, 2013 21:00 pm MDT</h4>
+    <p>
+        I have just uploaded a new and improved version.  Here are the changes:
+        <ul style="padding-left:15px;">
+            <li>The name of the app is now EndeavorTraining.  The title inside the app remains the same though.  The name of the app had to change because 9etraining is not a compliant name and it was causing bugs.</li>
+            <li>It has a new icon.  I don't make the icons I just use the stock ones.  So the icon is now the stock Phonegap icon instead of the Android icon.</li>
+            <li>There are now Quick Select and Bookmark features.</li>
+            <li>There are a bunch of bug fixes.  I am now compiling the app differently so people who were getting that &quot;unable to parse&quot; error should be good to go.  Please let me know if you are still having problems.</li>
+        </ul>
+        So there you have it. Version 1.0.  Remember to hit the sync button periodically to get the latest data which should get an update soon.  If enough people bug me about it I will push this to the Android market so we can have auto updating.
+    </p>
+
     <h4>Update: Thursday August 8, 2013 11:59 pm MDT</h4>
-    <p>There was a bug that caused the app to force close on certain devices when the the user changed the devices's orientation.  The bug has been fixed and a new version has been uploaded.  You should delete the app and download the new version and repeat the installation process.</p>
+    <p>
+        There was a bug that caused the app to force close on certain devices when the the user changed the devices's orientation.  The bug has been fixed and a new version has been uploaded.  You should delete the app and download the new version and repeat the installation process.
+    </p>
 <?php endif; ?>
